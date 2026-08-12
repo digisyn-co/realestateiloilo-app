@@ -1,0 +1,458 @@
+// Real Estate Iloilo — data model
+// Local dev: SQLite. Production: switch provider to "postgresql" (PostGIS
+// recommended for geospatial listing search). Enum-like fields are stored as
+// String on SQLite; the allowed values are enforced in the app layer via Zod
+// (see src/lib/enums.ts) so the same schema runs on both databases.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // Postgres for production (Vercel). For zero-setup local dev you can switch
+  // this to "sqlite" and set DATABASE_URL="file:./dev.db" — the schema is
+  // written to be portable across both (no provider-specific features).
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Identity & roles
+// ---------------------------------------------------------------------------
+
+model User {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  phone              String?
+  passwordHash       String?
+  role               String   @default("BUYER") // VISITOR|BUYER|OWNER|AGENT|BROKER|DEVELOPER|ADMIN
+  avatarUrl          String?
+  verificationStatus String   @default("UNVERIFIED") // UNVERIFIED|PENDING|VERIFIED|REJECTED
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  agent            Agent?
+  listingsAsOwner  Listing[]        @relation("OwnerListings")
+  savedProperties  SavedProperty[]
+  inquiries        Inquiry[]        @relation("InquiryFromUser")
+  sentMessages     Message[]        @relation("MessageSender")
+  threadsA         Thread[]         @relation("ThreadBuyer")
+  reportsFiled     Report[]         @relation("ReportReporter")
+  viewingRequests  ViewingRequest[] @relation("ViewingRequester")
+  notifications    Notification[]
+  auditLogs        AuditLog[]
+  importJobs       ImportJob[]      @relation("ImportInitiator")
+
+  @@index([role])
+}
+
+model Agent {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company       String?
+  licenseNumber String? // PRC license
+  bio           String?
+  verified      Boolean  @default(false)
+  contactPhone  String?
+  contactEmail  String?
+  responseTime  String? // e.g. "about 2 hours"
+  createdAt     DateTime @default(now())
+
+  listings       Listing[]        @relation("AgentListings")
+  reviews        AgentReview[]
+  importSources  ImportSource[]
+  threads        Thread[]         @relation("ThreadAgent")
+  leads          Lead[]
+  viewingSlots   ViewingRequest[] @relation("ViewingAgent")
+}
+
+model AgentReview {
+  id        String   @id @default(cuid())
+  agentId   String
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  authorName String
+  rating    Int // 1..5
+  text      String
+  createdAt DateTime @default(now())
+
+  @@index([agentId])
+}
+
+// ---------------------------------------------------------------------------
+// Property & listing
+// ---------------------------------------------------------------------------
+
+model Property {
+  id           String   @id @default(cuid())
+  title        String
+  description  String
+  propertyType String // HOUSE|CONDO|APARTMENT|TOWNHOUSE|LOT|COMMERCIAL|OFFICE|WAREHOUSE|FARM|RESORT|INDUSTRIAL|BUILDING|OTHER
+  address      String?
+  barangay     String?
+  city         String // Iloilo City, Pavia, Oton, ...
+  province     String   @default("Iloilo")
+  latitude     Float?
+  longitude    Float?
+  bedrooms     Int?
+  bathrooms    Int?
+  floorArea    Float? // sqm
+  lotArea      Float? // sqm
+  parking      Int?
+  furnishing   String? // UNFURNISHED|SEMI_FURNISHED|FURNISHED
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  listing    Listing?
+  amenities  PropertyAmenity[]
+
+  @@index([city])
+  @@index([propertyType])
+  @@index([latitude, longitude])
+}
+
+model Amenity {
+  id         String            @id @default(cuid())
+  name       String            @unique
+  properties PropertyAmenity[]
+}
+
+model PropertyAmenity {
+  propertyId String
+  amenityId  String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  amenity    Amenity  @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([propertyId, amenityId])
+}
+
+model Listing {
+  id           String   @id @default(cuid())
+  propertyId   String   @unique
+  property     Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  agentId String?
+  agent   Agent?  @relation("AgentListings", fields: [agentId], references: [id])
+  ownerId String?
+  owner   User?   @relation("OwnerListings", fields: [ownerId], references: [id])
+
+  listingType String // SALE|RENT
+  price       Float
+  currency    String  @default("PHP")
+  priceDropPct Int?   // set when a price drop is recorded
+
+  // status lifecycle
+  status             String @default("DRAFT") // DRAFT|PENDING_REVIEW|ACTIVE|RESERVED|SOLD|RENTED|EXPIRED|REJECTED|ARCHIVED
+  verificationStatus String @default("UNVERIFIED") // UNVERIFIED|PENDING|VERIFIED|REJECTED
+  verifiedNote       String? // e.g. "Broker-verified"
+
+  // provenance / source attribution (imported listings)
+  sourceId        String?
+  source          ImportSource? @relation(fields: [sourceId], references: [id])
+  sourceUrl       String?
+  sourceListingId String?
+  sourceName      String? // human label e.g. "Broker XML feed"
+  importMethod    String? // API|FEED|CSV|JSON|XML|MANUAL_URL|NATIVE
+  importJobId     String?
+  importRecordId  String?       @unique
+
+  // freshness tracking
+  sourceLastSeenAt DateTime?
+  lastVerifiedAt   DateTime?
+  publishedAt      DateTime?
+  expiresAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  images          ListingImage[]
+  savedBy         SavedProperty[]
+  inquiries       Inquiry[]
+  reports         Report[]
+  views           PropertyView[]
+  threads         Thread[]
+  viewingRequests ViewingRequest[]
+  leads           Lead[]
+  duplicatesA     DuplicateMatch[] @relation("DupA")
+  duplicatesB     DuplicateMatch[] @relation("DupB")
+
+  @@index([status])
+  @@index([listingType])
+  @@index([price])
+  @@index([publishedAt])
+  @@index([sourceId])
+}
+
+model ListingImage {
+  id          String  @id @default(cuid())
+  listingId   String
+  listing     Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  url         String
+  thumbUrl    String?
+  source      String? // ORIGINAL_UPLOAD|IMPORTED|EXTERNAL_REF
+  rightsStatus String @default("OWNED") // OWNED|AUTHORISED|PENDING_PERMISSION|EXTERNAL_REF
+  sortOrder   Int     @default(0)
+  width       Int?
+  height      Int?
+  createdAt   DateTime @default(now())
+
+  @@index([listingId])
+}
+
+// ---------------------------------------------------------------------------
+// Engagement
+// ---------------------------------------------------------------------------
+
+model SavedProperty {
+  id         String   @id @default(cuid())
+  userId     String
+  listingId  String
+  collection String   @default("All") // buyer-defined collection
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, listingId])
+  @@index([userId])
+}
+
+model Inquiry {
+  id         String   @id @default(cuid())
+  listingId  String
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  fromUserId String?
+  fromUser   User?    @relation("InquiryFromUser", fields: [fromUserId], references: [id])
+  name       String
+  email      String?
+  phone      String?
+  message    String
+  channel    String   @default("MESSAGE") // MESSAGE|CALL|VIEWING|EMAIL
+  status     String   @default("NEW") // NEW|CONTACTED|QUALIFIED|CLOSED
+  createdAt  DateTime @default(now())
+
+  lead Lead?
+
+  @@index([listingId])
+  @@index([status])
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  agentId   String
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  listingId String?
+  listing   Listing? @relation(fields: [listingId], references: [id])
+  inquiryId String?  @unique
+  inquiry   Inquiry? @relation(fields: [inquiryId], references: [id])
+  name      String
+  contact   String?
+  stage     String   @default("NEW") // NEW|CONTACTED|VIEWING|OFFER|WON|LOST
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([agentId])
+  @@index([stage])
+}
+
+model Thread {
+  id        String   @id @default(cuid())
+  listingId String?
+  listing   Listing? @relation(fields: [listingId], references: [id])
+  buyerId   String
+  buyer     User     @relation("ThreadBuyer", fields: [buyerId], references: [id])
+  agentId   String?
+  agent     Agent?   @relation("ThreadAgent", fields: [agentId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages Message[]
+
+  @@index([buyerId])
+  @@index([agentId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  threadId  String
+  thread    Thread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User     @relation("MessageSender", fields: [senderId], references: [id])
+  body      String
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([threadId])
+}
+
+model ViewingRequest {
+  id          String   @id @default(cuid())
+  listingId   String
+  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  requesterId String?
+  requester   User?    @relation("ViewingRequester", fields: [requesterId], references: [id])
+  agentId     String?
+  agent       Agent?   @relation("ViewingAgent", fields: [agentId], references: [id])
+  scheduledAt DateTime
+  slotLabel   String?
+  status      String   @default("REQUESTED") // REQUESTED|CONFIRMED|DECLINED|COMPLETED|CANCELLED
+  note        String?
+  createdAt   DateTime @default(now())
+
+  @@index([listingId])
+}
+
+model PropertyView {
+  id        String   @id @default(cuid())
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  viewerKey String? // hashed session/user key for de-duping
+  source    String? // web|app|share
+  createdAt DateTime @default(now())
+
+  @@index([listingId])
+  @@index([createdAt])
+}
+
+model Report {
+  id         String   @id @default(cuid())
+  listingId  String
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  reporterId String?
+  reporter   User?    @relation("ReportReporter", fields: [reporterId], references: [id])
+  reason     String // SCAM|DUPLICATE|WRONG_INFO|SOLD|OFFENSIVE|OTHER
+  detail     String?
+  status     String   @default("OPEN") // OPEN|REVIEWING|ACTIONED|DISMISSED
+  createdAt  DateTime @default(now())
+
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Import engine
+// ---------------------------------------------------------------------------
+
+model ImportSource {
+  id           String   @id @default(cuid())
+  name         String
+  adapter      String // META|BROKER_FEED|CSV|JSON|XML|MANUAL_URL
+  config       String? // JSON blob: feed url, auth ref, mapping
+  ownerAgentId String?
+  ownerAgent   Agent?   @relation(fields: [ownerAgentId], references: [id])
+  authorised   Boolean  @default(false) // legal/permission gate
+  automated    Boolean  @default(false) // scheduled sync allowed
+  schedule     String? // MANUAL|EVERY_15M|HOURLY|DAILY
+  attribution  String? // required attribution text
+  lastSyncAt   DateTime?
+  nextSyncAt   DateTime?
+  createdAt    DateTime @default(now())
+
+  jobs     ImportJob[]
+  records  ImportRecord[]
+  listings Listing[]
+
+  @@index([adapter])
+}
+
+model ImportJob {
+  id             String   @id @default(cuid())
+  sourceId       String
+  source         ImportSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  initiatorId    String?
+  initiator      User?    @relation("ImportInitiator", fields: [initiatorId], references: [id])
+  status         String   @default("QUEUED") // QUEUED|RUNNING|COMPLETED|FAILED|PARTIAL
+  trigger        String   @default("MANUAL") // MANUAL|SCHEDULED
+  discovered     Int      @default(0)
+  updated        Int      @default(0)
+  skipped        Int      @default(0)
+  duplicates     Int      @default(0)
+  errors         Int      @default(0)
+  log            String? // JSON array of stage log lines
+  startedAt      DateTime?
+  finishedAt     DateTime?
+  createdAt      DateTime @default(now())
+
+  records ImportRecord[]
+
+  @@index([sourceId])
+  @@index([status])
+}
+
+model ImportRecord {
+  id            String   @id @default(cuid())
+  jobId         String?
+  job           ImportJob? @relation(fields: [jobId], references: [id])
+  sourceId      String
+  source        ImportSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  // raw + normalized payloads (JSON)
+  raw           String
+  normalized    String?
+  sourceUrl     String?
+  sourceListingId String?
+
+  status        String   @default("PENDING") // PENDING|PROCESSING|NEEDS_REVIEW|DUPLICATE|APPROVED|REJECTED|PUBLISHED|ARCHIVED|SOURCE_UNAVAILABLE
+  dupConfidence Int? // 0..100 best duplicate score
+  dupListingId  String? // best-match existing listing
+  rightsFlag    String   @default("UNKNOWN") // UNKNOWN|AUTHORISED|NEEDS_PERMISSION
+  reviewerId    String?
+  reviewNote    String?
+  publishedListingId String? @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  matches DuplicateMatch[] @relation("MatchRecord")
+
+  @@index([status])
+  @@index([sourceId])
+}
+
+model DuplicateMatch {
+  id           String   @id @default(cuid())
+  recordId     String?
+  record       ImportRecord? @relation("MatchRecord", fields: [recordId], references: [id], onDelete: Cascade)
+  listingAId   String? // existing listing (candidate)
+  listingA     Listing? @relation("DupA", fields: [listingAId], references: [id])
+  listingBId   String? // other existing listing when comparing two natives
+  listingB     Listing? @relation("DupB", fields: [listingBId], references: [id])
+  confidence   Int // 0..100
+  signals      String // JSON: per-signal contributions
+  resolution   String   @default("PENDING") // PENDING|MERGED|SEPARATE|IGNORED
+  createdAt    DateTime @default(now())
+
+  @@index([confidence])
+  @@index([resolution])
+}
+
+// ---------------------------------------------------------------------------
+// Platform
+// ---------------------------------------------------------------------------
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String // INQUIRY|LISTING_APPROVED|LISTING_REJECTED|LISTING_EXPIRING|DUPLICATE_DETECTED|IMPORT_COMPLETED|IMPORT_FAILED|STATUS_CHANGED|VIEWING
+  title     String
+  body      String?
+  href      String?
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([readAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id])
+  action    String
+  entity    String
+  entityId  String?
+  meta      String? // JSON
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}

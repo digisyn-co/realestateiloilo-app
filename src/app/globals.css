@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: theme(colors.app);
+  color: theme(colors.ink.DEFAULT);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d8cfc3;
+  border-radius: 999px;
+}
+
+@layer components {
+  /* Terracotta primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-accent px-5 font-sans font-semibold text-white transition-colors;
+    min-height: 52px;
+  }
+  .btn-primary:hover {
+    background: #9d4715;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-surface px-5 font-sans font-semibold text-ink shadow-card transition-colors;
+    min-height: 52px;
+  }
+  .btn-soft {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-accent-soft px-4 font-sans font-semibold text-accent transition-colors;
+    min-height: 46px;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-2 font-sans text-xs font-semibold;
+  }
+  .chip {
+    @apply inline-flex flex-none items-center gap-1.5 rounded-full bg-surface px-4 font-sans text-[13px] font-semibold text-ink-2 shadow-card transition-colors;
+    height: 44px;
+  }
+  .chip[data-active="true"] {
+    @apply bg-ink text-white shadow-none;
+  }
+  .card {
+    @apply rounded-card bg-surface shadow-card;
+  }
+  .stat-tile {
+    @apply rounded-2xl bg-surface p-3 shadow-card;
+  }
+  .field {
+    @apply w-full rounded-2xl bg-surface px-4 py-3.5 font-sans text-[15px] text-ink shadow-card outline-none;
+    min-height: 50px;
+  }
+  .field:focus {
+    box-shadow: 0 0 0 2px theme(colors.accent.DEFAULT);
+  }
+  .serif-price {
+    @apply font-serif tabular-nums;
+    letter-spacing: -0.015em;
+  }
+  /* dark dashboard input */
+  .dfield {
+    @apply w-full border border-[#33302A] bg-[#0B0A08] px-3.5 py-3 font-sans text-[14.5px] text-[#F4F0E6] outline-none;
+  }
+  .dfield:focus {
+    border-color: #c9a227;
+  }
+}
+
+/* Fine-grained map decoration helpers reused by the stylised map */
+.map-road {
+  position: absolute;
+  background: theme(colors.map.road);
+}
+.map-water {
+  position: absolute;
+  background: theme(colors.map.water);
+}
