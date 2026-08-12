@@ -280,8 +280,8 @@ async function seedBrokerage(
 ) {
   const headAgentId = head.agent!.id;
   const memberSeeds = [
-    { name: "Miguel Fuentes", email: "miguel@ilonggorealty.ph", title: "Senior Agent" },
-    { name: "Bea Cordero", email: "bea@ilonggorealty.ph", title: "Agent" },
+    { name: "Paolo Tirador", email: "paolo@ilonggorealty.ph", title: "Senior Agent" },
+    { name: "Andrea Lacson", email: "andrea@ilonggorealty.ph", title: "Agent" },
   ];
   const members: Array<Awaited<ReturnType<typeof prisma.user.create>> & { agent: { id: string } | null }> = [];
   for (const m of memberSeeds) {
