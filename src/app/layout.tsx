@@ -20,9 +20,9 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "The Iloilo Real Estate — every property in Iloilo, verified",
+  title: "The Iloilo Real Estate — Real Estate Made Easy in Iloilo",
   description:
-    "Homes, land, rentals and commercial property across Iloilo City and its neighbouring towns. Every listing checked before it goes live.",
+    "Real estate made easy in Iloilo — homes, land, rentals and commercial property across Iloilo City and its neighbouring towns. Every listing checked before it goes live.",
 };
 
 export const viewport: Viewport = {
