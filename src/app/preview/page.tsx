@@ -74,16 +74,18 @@ export default function PreviewPage() {
           className="relative bg-black shadow-[0_50px_120px_-20px_rgba(0,0,0,.7)]"
           style={{ width: d.w + 24, height: d.h + 24, borderRadius: d.radius + 12, padding: 12 }}
         >
-          <div className="relative overflow-hidden bg-white" style={{ width: d.w, height: d.h, borderRadius: d.radius }}>
+          <div className="relative overflow-hidden" style={{ width: d.w, height: d.h, borderRadius: d.radius, background: "#031A14" }}>
+            {/* status-bar area (matches the app's dark header) so the notch/island
+                doesn't overlap the app content */}
             {d.island && (
-              <div className="pointer-events-none absolute left-1/2 top-2 z-10 h-[26px] w-[110px] -translate-x-1/2 rounded-full bg-black" />
+              <div className="pointer-events-none absolute left-1/2 top-[10px] z-10 h-[28px] w-[112px] -translate-x-1/2 rounded-full bg-black" />
             )}
             <iframe
               key={`${device}-${start}-${nonce}`}
               src={start}
               title="The Iloilo Real Estate app preview"
-              className="h-full w-full border-0"
-              style={{ width: d.w, height: d.h }}
+              className="border-0"
+              style={{ width: d.w, height: d.h - (d.island ? 44 : 16), marginTop: d.island ? 44 : 16 }}
             />
           </div>
         </div>

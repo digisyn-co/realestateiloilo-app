@@ -15,13 +15,14 @@ export function BrandLogo({
   className = "",
   textClassName = "",
 }: {
-  variant?: "full" | "mark";
+  variant?: "full" | "mark" | "horizontal";
   width?: number;
   className?: string;
   textClassName?: string;
 }) {
   const [failed, setFailed] = useState(false);
-  const src = variant === "mark" ? "/brand/mark.png" : "/brand/logo.png";
+  const src =
+    variant === "mark" ? "/brand/mark.png" : variant === "horizontal" ? "/brand/logo-horizontal.png" : "/brand/logo.png";
 
   if (failed) {
     return (

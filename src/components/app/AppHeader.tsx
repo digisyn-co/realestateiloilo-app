@@ -11,16 +11,17 @@ export async function AppHeader() {
   if (user) unread = await prisma.notification.count({ where: { userId: user.id, readAt: null } });
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line-2 bg-app/90 backdrop-blur">
-      <div className="mx-auto flex h-[62px] max-w-[1200px] items-center gap-4 px-4">
-        <Link href="/browse" className="flex items-center gap-2.5">
-          <BrandLogo variant="mark" width={32} className="rounded-[8px]" />
-          <span className="font-serif text-[22px] leading-none text-ink">
-            The <span className="italic text-accent">Iloilo</span> Real Estate
-          </span>
+    <header
+      className="sticky top-0 z-40 bg-[#031A14]"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
+    >
+      <div className="mx-auto flex h-[58px] max-w-[1200px] items-center gap-3 px-4">
+        <Link href="/browse" className="flex flex-none items-center" aria-label="The Iloilo Real Estate — Home">
+          {/* horizontal lockup sits on the dark header seamlessly */}
+          <BrandLogo variant="horizontal" className="h-8 w-auto md:h-9" />
         </Link>
 
-        <nav className="ml-6 hidden items-center gap-1 md:flex">
+        <nav className="ml-4 hidden items-center gap-1 lg:flex">
           <TopLink href="/browse">Browse</TopLink>
           <TopLink href="/map">Map</TopLink>
           <TopLink href="/saved">Saved</TopLink>
@@ -30,27 +31,27 @@ export async function AppHeader() {
         <div className="ml-auto flex items-center gap-2">
           <Link
             href="/ai"
-            className="hidden items-center gap-2 rounded-full bg-accent-soft px-4 py-2.5 font-sans text-[13px] font-semibold text-accent sm:inline-flex"
+            className="hidden items-center gap-2 rounded-full bg-[#D6A84F] px-4 py-2 font-sans text-[13px] font-semibold text-[#031A14] sm:inline-flex"
           >
             <Sparkles size={15} /> Ask AI
           </Link>
-          <Link href="/account" className="relative grid h-[42px] w-[42px] place-items-center rounded-full bg-surface shadow-card">
-            <Bell size={16} className="text-ink-2" />
+          <Link href="/account" className="relative grid h-10 w-10 place-items-center rounded-full bg-white/10">
+            <Bell size={16} className="text-[#F4F0E6]" />
             {unread > 0 && (
-              <span className="absolute right-0 top-0 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-accent px-1 font-sans text-[10px] font-bold text-white">
+              <span className="absolute right-0 top-0 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-[#D6A84F] px-1 font-sans text-[10px] font-bold text-[#031A14]">
                 {unread}
               </span>
             )}
           </Link>
-          <Link href="/messages" className="grid h-[42px] w-[42px] place-items-center rounded-full bg-surface shadow-card">
-            <Mail size={15} className="text-ink-2" />
+          <Link href="/messages" className="hidden h-10 w-10 place-items-center rounded-full bg-white/10 sm:grid">
+            <Mail size={15} className="text-[#F4F0E6]" />
           </Link>
           {user ? (
-            <Link href="/account" className="grid h-[42px] w-[42px] place-items-center rounded-full bg-ink font-sans text-[13px] font-bold text-white">
+            <Link href="/account" className="grid h-10 w-10 place-items-center rounded-full bg-[#D6A84F] font-sans text-[13px] font-bold text-[#031A14]">
               {user.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
             </Link>
           ) : (
-            <Link href="/login" className="hidden rounded-full bg-ink px-4 py-2.5 font-sans text-[13px] font-semibold text-white sm:inline-flex">
+            <Link href="/login" className="rounded-full bg-[#D6A84F] px-4 py-2 font-sans text-[13px] font-semibold text-[#031A14]">
               Sign in
             </Link>
           )}
@@ -62,7 +63,7 @@ export async function AppHeader() {
 
 function TopLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link href={href} className="rounded-full px-3 py-2 font-sans text-[14px] font-medium text-ink-2 hover:bg-sand">
+    <Link href={href} className="rounded-full px-3 py-2 font-sans text-[14px] font-medium text-[#F4F0E6]/85 hover:bg-white/10 hover:text-[#F4F0E6]">
       {children}
     </Link>
   );

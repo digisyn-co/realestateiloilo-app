@@ -34,7 +34,7 @@ export function SearchControls({ showMapLink = true }: { showMapLink?: boolean }
   const active = (v: string, key = "listingType") => sp.get(key) === v;
 
   return (
-    <div className="sticky top-[62px] z-30 -mx-4 border-b border-line-2 bg-app/95 px-4 py-3 backdrop-blur">
+    <div className="sticky top-[58px] z-30 -mx-4 border-b border-line-2 bg-app/95 px-4 py-3 backdrop-blur">
       <form
         onSubmit={(e) => {
           e.preventDefault();
