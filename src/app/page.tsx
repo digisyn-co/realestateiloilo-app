@@ -32,12 +32,7 @@ export default async function Home() {
       {/* header */}
       <header className="sticky top-0 z-50 border-b border-[#183A2B] bg-[#05120C]/85 backdrop-blur">
         <div className="mx-auto flex h-[70px] max-w-[1360px] items-center gap-8 px-6">
-          <div className="flex items-center gap-2.5">
-            <BrandLogo variant="mark" width={34} className="rounded-[8px]" />
-            <span className="font-serif text-[22px] leading-none">
-              The <span className="italic text-[#D6A84F]">Iloilo</span> Real Estate
-            </span>
-          </div>
+          <BrandLogo variant="horizontal" className="h-11 w-auto flex-none md:h-12" />
           <nav className="hidden items-center gap-7 md:flex">
             {[["How it works", "#how"], ["Verified", "#verified"], ["Districts", "#districts"], ["Pricing", "#pricing"], ["Careers", "#careers"]].map(([l, h]) => (
               <a key={l} href={h} className="text-[9.5px] font-semibold uppercase tracking-[0.17em] text-[#F4F0E6]/70 hover:text-[#D6A84F]">
