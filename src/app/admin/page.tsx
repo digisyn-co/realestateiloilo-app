@@ -24,7 +24,7 @@ export default async function AdminOverview() {
   return (
     <div>
       <PageTitle title="Platform overview" subtitle="Health of the marketplace at a glance." />
-      <div className="grid grid-cols-2 gap-px bg-[#1A3550] md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-px bg-[#183A2B] md:grid-cols-4">
         <Kpi value={live.toLocaleString()} label="Live listings" tone="gold" />
         <Kpi value={brokers} label="Active brokers" />
         <Kpi value={inVerification} label="In verification" tone="orange" />
@@ -45,18 +45,18 @@ export default async function AdminOverview() {
           </div>
         </Panel>
 
-        <Panel title="Recent audit log" action={<Link href="/admin/audit" className="text-[12px] text-[#C6A15C]">View all</Link>}>
-          <div className="divide-y divide-[#1A3550]">
+        <Panel title="Recent audit log" action={<Link href="/admin/audit" className="text-[12px] text-[#D6A84F]">View all</Link>}>
+          <div className="divide-y divide-[#183A2B]">
             {audit.map((a) => (
               <div key={a.id} className="flex items-center justify-between py-2.5 text-[13px]">
                 <span>
-                  <span className="text-[#C6A15C]">{a.action.replace(/_/g, " ").toLowerCase()}</span>{" "}
-                  <span className="text-[#8AA0B4]">· {a.entity}</span>
+                  <span className="text-[#D6A84F]">{a.action.replace(/_/g, " ").toLowerCase()}</span>{" "}
+                  <span className="text-[#95A79C]">· {a.entity}</span>
                 </span>
-                <span className="text-[11px] text-[#46617A]">{timeAgo(a.createdAt)}</span>
+                <span className="text-[11px] text-[#4A6353]">{timeAgo(a.createdAt)}</span>
               </div>
             ))}
-            {audit.length === 0 && <p className="py-3 text-[13px] text-[#8AA0B4]">No activity yet.</p>}
+            {audit.length === 0 && <p className="py-3 text-[13px] text-[#95A79C]">No activity yet.</p>}
           </div>
         </Panel>
       </div>
@@ -66,9 +66,9 @@ export default async function AdminOverview() {
 
 function Attn({ href, label, n }: { href: string; label: string; n: number }) {
   return (
-    <Link href={href} className="flex items-center justify-between border border-[#1A3550] bg-[#0A1C33] px-4 py-3 hover:border-[#C6A15C]">
+    <Link href={href} className="flex items-center justify-between border border-[#183A2B] bg-[#05120C] px-4 py-3 hover:border-[#D6A84F]">
       <span className="text-[13.5px]">{label}</span>
-      <span className="font-serif text-[20px] tabular-nums" style={{ color: n ? "#C6A15C" : "#46617A" }}>{n}</span>
+      <span className="font-serif text-[20px] tabular-nums" style={{ color: n ? "#D6A84F" : "#4A6353" }}>{n}</span>
     </Link>
   );
 }

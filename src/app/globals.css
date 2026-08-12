@@ -33,13 +33,13 @@ body {
 }
 
 @layer components {
-  /* Antique-gold primary button (brand) */
+  /* Champagne-gold primary button (brand) */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-accent px-5 font-sans font-semibold text-white transition-colors;
     min-height: 52px;
   }
   .btn-primary:hover {
-    background: #83682f;
+    background: #7c621f;
   }
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-surface px-5 font-sans font-semibold text-ink shadow-card transition-colors;
@@ -76,12 +76,12 @@ body {
     @apply font-serif tabular-nums;
     letter-spacing: -0.015em;
   }
-  /* dark dashboard input (navy theme) */
+  /* dark dashboard input (forest-green theme) */
   .dfield {
-    @apply w-full border border-[#274563] bg-[#0A1C33] px-3.5 py-3 font-sans text-[14.5px] text-[#EDE7D6] outline-none;
+    @apply w-full border border-[#245140] bg-[#05120C] px-3.5 py-3 font-sans text-[14.5px] text-[#F4F0E6] outline-none;
   }
   .dfield:focus {
-    border-color: #c6a15c;
+    border-color: #d6a84f;
   }
 }
 

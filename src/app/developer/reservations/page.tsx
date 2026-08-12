@@ -8,7 +8,7 @@ import { releaseExpiredHolds } from "@/lib/developer/reservations";
 export const dynamic = "force-dynamic";
 
 const TONE: Record<string, string> = {
-  HELD: "#C6A15C", REQUESTED: "#C6A15C", RESERVED: "#5FA39C", APPROVED: "#5FA39C", REJECTED: "#C05B4A", CANCELLED: "#8AA0B4", EXPIRED: "#8AA0B4", SOLD: "#8AA0B4",
+  HELD: "#D6A84F", REQUESTED: "#D6A84F", RESERVED: "#6FB58F", APPROVED: "#6FB58F", REJECTED: "#C05B4A", CANCELLED: "#95A79C", EXPIRED: "#95A79C", SOLD: "#95A79C",
 };
 
 export default async function DeveloperReservations() {
@@ -29,21 +29,21 @@ export default async function DeveloperReservations() {
       <PageTitle title="Reservations" subtitle="Approve holds before they expire. Inventory locking prevents double-booking (brief §21)." />
       <Panel>
         {reservations.length === 0 ? (
-          <p className="py-6 text-center text-[13.5px] text-[#8AA0B4]">No reservations yet.</p>
+          <p className="py-6 text-center text-[13.5px] text-[#95A79C]">No reservations yet.</p>
         ) : (
           <div className="grid gap-3">
             {reservations.map((r) => {
               const held = r.status === "HELD" || r.status === "REQUESTED";
               const expiresIn = r.holdExpiresAt ? Math.max(0, Math.round((r.holdExpiresAt.getTime() - Date.now()) / 3600000)) : null;
               return (
-                <div key={r.id} className="flex flex-wrap items-center justify-between gap-3 border border-[#1F3E5A] bg-[#0A1C33] p-4">
+                <div key={r.id} className="flex flex-wrap items-center justify-between gap-3 border border-[#1C4635] bg-[#05120C] p-4">
                   <div>
                     <div className="text-[14.5px] font-medium">
                       Unit {r.unit.unitNumber} · {r.project.name}
                     </div>
-                    <div className="text-[12px] text-[#8AA0B4]">
+                    <div className="text-[12px] text-[#95A79C]">
                       {r.buyerName}{r.agent ? ` · via ${r.agent.user.name}` : " · direct"} · {timeAgo(r.createdAt)}
-                      {held && expiresIn != null && <span className="text-[#C6A15C]"> · hold expires in {expiresIn}h</span>}
+                      {held && expiresIn != null && <span className="text-[#D6A84F]"> · hold expires in {expiresIn}h</span>}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -51,14 +51,14 @@ export default async function DeveloperReservations() {
                     {held && (
                       <form action={resolveReservationAction} className="flex gap-2">
                         <input type="hidden" name="id" value={r.id} />
-                        <button name="decision" value="APPROVE" className="border border-[#C6A15C] bg-[#C6A15C] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#0A1C33]">Approve</button>
-                        <button name="decision" value="REJECT" className="border border-[#274563] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#8AA0B4] hover:border-[#C05B4A] hover:text-[#C05B4A]">Reject</button>
+                        <button name="decision" value="APPROVE" className="border border-[#D6A84F] bg-[#D6A84F] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#05120C]">Approve</button>
+                        <button name="decision" value="REJECT" className="border border-[#245140] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#95A79C] hover:border-[#C05B4A] hover:text-[#C05B4A]">Reject</button>
                       </form>
                     )}
                     {(r.status === "RESERVED" || r.status === "APPROVED") && (
                       <form action={resolveReservationAction}>
                         <input type="hidden" name="id" value={r.id} />
-                        <button name="decision" value="SOLD" className="border border-[#274563] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#5FA39C] hover:text-[#5FA39C]">Mark sold</button>
+                        <button name="decision" value="SOLD" className="border border-[#245140] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#6FB58F] hover:text-[#6FB58F]">Mark sold</button>
                       </form>
                     )}
                   </div>

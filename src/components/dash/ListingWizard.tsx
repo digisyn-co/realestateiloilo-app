@@ -26,7 +26,7 @@ export function ListingWizard() {
   };
 
   return (
-    <form action={action} className="border border-[#1A3550] bg-[#0D2540]">
+    <form action={action} className="border border-[#183A2B] bg-[#0C2018]">
       {/* hidden fields carry state to the server action */}
       {Object.entries(data).map(([k, v]) => (
         <input key={k} type="hidden" name={k} value={v} />
@@ -34,9 +34,9 @@ export function ListingWizard() {
       <input type="hidden" name="amenities" value={amenities.join(",")} />
 
       {/* stepper */}
-      <div className="flex flex-wrap gap-2 border-b border-[#1A3550] px-5 py-4">
+      <div className="flex flex-wrap gap-2 border-b border-[#183A2B] px-5 py-4">
         {STEPS.map((s, i) => (
-          <span key={s} className={`text-[9px] font-semibold uppercase tracking-[0.14em] ${i === step ? "text-[#C6A15C]" : i < step ? "text-[#5FA39C]" : "text-[#46617A]"}`}>
+          <span key={s} className={`text-[9px] font-semibold uppercase tracking-[0.14em] ${i === step ? "text-[#D6A84F]" : i < step ? "text-[#6FB58F]" : "text-[#4A6353]"}`}>
             {i + 1}. {s}
           </span>
         ))}
@@ -92,7 +92,7 @@ export function ListingWizard() {
         {step === 5 && (
           <Field label="Main photo URL">
             <input value={data.imageUrl || ""} onChange={(e) => set("imageUrl", e.target.value)} className="dfield" placeholder="/property-images/a1.png or https://…" />
-            <p className="mt-2 text-[12px] text-[#8AA0B4]">In production this is a drag-and-drop uploader with automatic thumbnail generation. For now, paste an image URL (optional).</p>
+            <p className="mt-2 text-[12px] text-[#95A79C]">In production this is a drag-and-drop uploader with automatic thumbnail generation. For now, paste an image URL (optional).</p>
           </Field>
         )}
         {step === 6 && (
@@ -117,7 +117,7 @@ export function ListingWizard() {
         {step === 8 && (
           <div>
             <h3 className="mb-4 font-serif text-[22px]">Review & publish</h3>
-            <dl className="grid gap-px bg-[#1A3550]">
+            <dl className="grid gap-px bg-[#183A2B]">
               {[
                 ["Title", data.title || "—"],
                 ["Type", `${PROPERTY_TYPE_LABELS[(data.propertyType as keyof typeof PROPERTY_TYPE_LABELS) || "HOUSE"]} · ${data.listingType}`],
@@ -126,24 +126,24 @@ export function ListingWizard() {
                 ["Specs", [data.bedrooms && `${data.bedrooms} bed`, data.bathrooms && `${data.bathrooms} bath`, data.floorArea && `${data.floorArea} sqm`].filter(Boolean).join(" · ") || "—"],
                 ["Amenities", amenities.join(", ") || "—"],
               ].map(([k, v]) => (
-                <div key={k} className="flex justify-between gap-4 bg-[#0A1C33] px-4 py-3 text-[13.5px]">
-                  <span className="text-[#8AA0B4]">{k}</span>
+                <div key={k} className="flex justify-between gap-4 bg-[#05120C] px-4 py-3 text-[13.5px]">
+                  <span className="text-[#95A79C]">{k}</span>
                   <span className="text-right">{v}</span>
                 </div>
               ))}
             </dl>
-            <p className="mt-4 text-[12px] text-[#8AA0B4]">On publish, the listing is submitted for admin review. It goes live once approved.</p>
+            <p className="mt-4 text-[12px] text-[#95A79C]">On publish, the listing is submitted for admin review. It goes live once approved.</p>
           </div>
         )}
         {state.error && <p className="mt-4 text-[13px] text-[#E2712B]">{state.error}</p>}
       </div>
 
-      <div className="flex items-center justify-between border-t border-[#1A3550] px-6 py-4">
-        <button type="button" onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0} className="text-[12px] font-semibold text-[#8AA0B4] disabled:opacity-40">
+      <div className="flex items-center justify-between border-t border-[#183A2B] px-6 py-4">
+        <button type="button" onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0} className="text-[12px] font-semibold text-[#95A79C] disabled:opacity-40">
           ← Back
         </button>
         {step < STEPS.length - 1 ? (
-          <button type="button" onClick={() => canNext() && setStep((s) => s + 1)} disabled={!canNext()} className="border border-[#C6A15C] bg-[#C6A15C] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#0A1C33] disabled:opacity-40">
+          <button type="button" onClick={() => canNext() && setStep((s) => s + 1)} disabled={!canNext()} className="border border-[#D6A84F] bg-[#D6A84F] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#05120C] disabled:opacity-40">
             Continue →
           </button>
         ) : (
@@ -157,7 +157,7 @@ export function ListingWizard() {
 function Publish() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="border border-[#C6A15C] bg-[#C6A15C] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#0A1C33] disabled:opacity-60">
+    <button type="submit" disabled={pending} className="border border-[#D6A84F] bg-[#D6A84F] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#05120C] disabled:opacity-60">
       {pending ? "Publishing…" : "Publish listing"}
     </button>
   );
@@ -166,7 +166,7 @@ function Publish() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="mb-4">
-      <div className="mb-2 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">{label}</div>
+      <div className="mb-2 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#95A79C]">{label}</div>
       {children}
     </div>
   );
@@ -174,7 +174,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function Choice({ active, onClick, children }: { active?: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <button type="button" onClick={onClick} className={`rounded-full px-4 py-2.5 text-[13px] font-semibold ${active ? "bg-[#C6A15C] text-[#0A1C33]" : "border border-[#274563] text-[#EDE7D6]/80 hover:border-[#C6A15C]"}`}>
+    <button type="button" onClick={onClick} className={`rounded-full px-4 py-2.5 text-[13px] font-semibold ${active ? "bg-[#D6A84F] text-[#05120C]" : "border border-[#245140] text-[#F4F0E6]/80 hover:border-[#D6A84F]"}`}>
       {children}
     </button>
   );

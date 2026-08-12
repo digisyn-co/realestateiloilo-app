@@ -28,27 +28,27 @@ const config: CapacitorConfig = {
     androidScheme: "https",
     iosScheme: "https",
   },
-  backgroundColor: "#FAF6EC",
+  backgroundColor: "#F4F0E6",
   ios: {
     contentInset: "always",
-    backgroundColor: "#FAF6EC",
+    backgroundColor: "#F4F0E6",
     limitsNavigationsToAppBoundDomains: false,
   },
   android: {
-    backgroundColor: "#FAF6EC",
+    backgroundColor: "#F4F0E6",
   },
   plugins: {
     SplashScreen: {
       launchShowDuration: 1200,
       launchAutoHide: false, // NativeBridge hides it once the web app is ready
-      backgroundColor: "#FAF6EC",
+      backgroundColor: "#F4F0E6",
       androidScaleType: "CENTER_CROP",
       showSpinner: false,
       splashImmersive: false,
     },
     StatusBar: {
       style: "LIGHT", // dark text/icons on the light app background
-      backgroundColor: "#FAF6EC",
+      backgroundColor: "#F4F0E6",
     },
     Keyboard: {
       resize: "native",

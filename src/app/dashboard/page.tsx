@@ -13,7 +13,7 @@ export default async function DashboardOverview() {
     return (
       <div>
         <PageTitle title="Overview" subtitle="Admin account — visit the broker tools from a broker login, or open the Admin dashboard." />
-        <Link href="/admin" className="text-[#C6A15C]">Go to Admin →</Link>
+        <Link href="/admin" className="text-[#D6A84F]">Go to Admin →</Link>
       </div>
     );
   }
@@ -36,7 +36,7 @@ export default async function DashboardOverview() {
   return (
     <div>
       <PageTitle title={`Welcome, ${user!.name.split(" ")[0]}`} subtitle="Your listings, leads and performance at a glance." />
-      <div className="grid grid-cols-2 gap-px bg-[#1A3550] md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-px bg-[#183A2B] md:grid-cols-4">
         <Kpi value={active} label="Active listings" tone="gold" />
         <Kpi value={weekViews} label="Views this week" />
         <Kpi value={leads} label="Open leads" tone="green" />
@@ -48,37 +48,37 @@ export default async function DashboardOverview() {
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <Panel title="Recent leads" action={<Link href="/dashboard/leads" className="text-[12px] text-[#C6A15C]">View all</Link>}>
+        <Panel title="Recent leads" action={<Link href="/dashboard/leads" className="text-[12px] text-[#D6A84F]">View all</Link>}>
           {recentLeads.length > 0 ? (
-            <div className="divide-y divide-[#1A3550]">
+            <div className="divide-y divide-[#183A2B]">
               {recentLeads.map((l) => (
                 <div key={l.id} className="flex items-center justify-between py-3">
                   <div>
                     <div className="text-[14px] font-medium">{l.name}</div>
-                    <div className="text-[12px] text-[#8AA0B4]">{l.listing?.property.title || "General enquiry"}</div>
+                    <div className="text-[12px] text-[#95A79C]">{l.listing?.property.title || "General enquiry"}</div>
                   </div>
-                  <span className="rounded-full border border-[#274563] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#C6A15C]">{l.stage}</span>
+                  <span className="rounded-full border border-[#245140] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#D6A84F]">{l.stage}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-[13.5px] text-[#8AA0B4]">No leads yet.</p>
+            <p className="text-[13.5px] text-[#95A79C]">No leads yet.</p>
           )}
         </Panel>
 
         <Panel title="Quick actions">
           <div className="grid gap-3">
-            <Link href="/dashboard/listings/new" className="block border border-[#C6A15C] bg-[#C6A15C] px-4 py-3.5 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#0A1C33]">
+            <Link href="/dashboard/listings/new" className="block border border-[#D6A84F] bg-[#D6A84F] px-4 py-3.5 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#05120C]">
               + Add a listing
             </Link>
-            <Link href="/dashboard/imports" className="block border border-[#274563] px-4 py-3.5 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#EDE7D6] hover:border-[#C6A15C] hover:text-[#C6A15C]">
+            <Link href="/dashboard/imports" className="block border border-[#245140] px-4 py-3.5 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#F4F0E6] hover:border-[#D6A84F] hover:text-[#D6A84F]">
               Import listings
             </Link>
-            <Link href="/dashboard/analytics" className="block border border-[#274563] px-4 py-3.5 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#EDE7D6] hover:border-[#C6A15C] hover:text-[#C6A15C]">
+            <Link href="/dashboard/analytics" className="block border border-[#245140] px-4 py-3.5 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-[#F4F0E6] hover:border-[#D6A84F] hover:text-[#D6A84F]">
               View analytics
             </Link>
           </div>
-          <p className="mt-4 text-[12px] leading-relaxed text-[#8AA0B4]">Total portfolio: {listings} listing{listings === 1 ? "" : "s"}. New listings are reviewed by an admin before they go live.</p>
+          <p className="mt-4 text-[12px] leading-relaxed text-[#95A79C]">Total portfolio: {listings} listing{listings === 1 ? "" : "s"}. New listings are reviewed by an admin before they go live.</p>
         </Panel>
       </div>
     </div>

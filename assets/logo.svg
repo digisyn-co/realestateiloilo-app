@@ -1,48 +1,49 @@
 <svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- App icon placeholder (brand guide §8): deep forest green bg, champagne-gold
+       IR monogram + bridge + waves, thin metallic-gold rounded border, no wordmark.
+       Replace with the real monogram: save public/brand/icon.png and regenerate. -->
   <defs>
-    <radialGradient id="bg" cx="50%" cy="34%" r="85%">
-      <stop offset="0%" stop-color="#0E2540"/>
-      <stop offset="100%" stop-color="#081524"/>
+    <radialGradient id="bg" cx="50%" cy="32%" r="88%">
+      <stop offset="0%" stop-color="#08281E"/>
+      <stop offset="100%" stop-color="#031A14"/>
     </radialGradient>
     <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#DBBE7E"/>
-      <stop offset="50%" stop-color="#C6A15C"/>
-      <stop offset="100%" stop-color="#9A7B39"/>
+      <stop offset="0%" stop-color="#F3D38A"/>
+      <stop offset="50%" stop-color="#D6A84F"/>
+      <stop offset="100%" stop-color="#9A7A2A"/>
     </linearGradient>
   </defs>
 
   <rect width="1024" height="1024" fill="url(#bg)"/>
-  <rect x="70" y="70" width="884" height="884" rx="150" fill="none" stroke="url(#gold)" stroke-width="10" opacity="0.85"/>
+  <rect x="72" y="72" width="880" height="880" rx="176" fill="none" stroke="url(#gold)" stroke-width="9" opacity="0.9"/>
 
-  <!-- suspension bridge arc + cables -->
+  <!-- crescent / circular form -->
+  <path d="M300 300 A250 250 0 1 0 724 300" fill="none" stroke="url(#gold)" stroke-width="14" opacity="0.55" stroke-linecap="round"/>
+
+  <!-- suspension bridge -->
   <g stroke="url(#gold)" fill="none" stroke-linecap="round">
-    <path d="M250 470 Q512 250 774 470" stroke-width="14"/>
+    <path d="M300 512 Q512 360 724 512" stroke-width="12"/>
     <g stroke-width="6" opacity="0.9">
-      <line x1="330" y1="392" x2="330" y2="500"/>
-      <line x1="410" y1="345" x2="410" y2="500"/>
-      <line x1="614" y1="345" x2="614" y2="500"/>
-      <line x1="694" y1="392" x2="694" y2="500"/>
+      <line x1="372" y1="452" x2="372" y2="556"/>
+      <line x1="442" y1="418" x2="442" y2="556"/>
+      <line x1="582" y1="418" x2="582" y2="556"/>
+      <line x1="652" y1="452" x2="652" y2="556"/>
     </g>
-    <!-- towers -->
-    <line x1="300" y1="300" x2="300" y2="520" stroke-width="16"/>
-    <line x1="724" y1="300" x2="724" y2="520" stroke-width="16"/>
+    <line x1="330" y1="360" x2="330" y2="576" stroke-width="15"/>
+    <line x1="694" y1="360" x2="694" y2="576" stroke-width="15"/>
   </g>
 
-  <!-- central serif column: the "I" monogram -->
+  <!-- IR monogram: serif I + sweeping R foot -->
   <g fill="url(#gold)">
-    <rect x="430" y="300" width="164" height="34" rx="6"/>
-    <rect x="484" y="300" width="56" height="330"/>
-    <rect x="410" y="610" width="204" height="40" rx="8"/>
-    <!-- L foot -->
-    <rect x="540" y="610" width="150" height="40" rx="8"/>
+    <rect x="452" y="332" width="120" height="30" rx="6"/>
+    <rect x="494" y="332" width="36" height="300"/>
+    <rect x="440" y="614" width="144" height="34" rx="8"/>
+    <path d="M584 614 q96 8 96 -70 q0 -66 -78 -66 l0 30 q44 0 44 38 q0 40 -62 38 z"/>
   </g>
 
   <!-- waves -->
   <g fill="none" stroke-linecap="round">
-    <path d="M250 712 Q330 682 410 712 T570 712 T730 712 T774 706" stroke="#7FA6AC" stroke-width="16"/>
-    <path d="M270 760 Q350 732 430 760 T590 760 T752 760" stroke="#C6A15C" stroke-width="12" opacity="0.85"/>
+    <path d="M296 690 Q372 662 448 690 T600 690 T724 684" stroke="#D6A84F" stroke-width="15"/>
+    <path d="M316 736 Q392 710 468 736 T620 736 T716 730" stroke="#9A7A2A" stroke-width="11" opacity="0.85"/>
   </g>
-
-  <!-- wordmark -->
-  <text x="512" y="882" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="120" letter-spacing="6" fill="url(#gold)">ILOILO</text>
 </svg>

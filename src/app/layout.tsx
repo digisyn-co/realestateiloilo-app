@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FAF6EC",
+  themeColor: "#F4F0E6",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1, // prevent zoom jank inside the native WebView

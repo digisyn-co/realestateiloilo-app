@@ -8,7 +8,7 @@ import { ALL_AREAS } from "@/lib/iloilo";
 export function CreateProjectForm() {
   const [state, action] = useFormState<DevActionResult, FormData>(createProjectAction, {});
   return (
-    <form action={action} className="grid gap-4 border border-[#1A3550] bg-[#0D2540] p-6">
+    <form action={action} className="grid gap-4 border border-[#183A2B] bg-[#0C2018] p-6">
       <Field label="Project name"><input name="name" className="dfield" placeholder="The Grand Iloilo Residences" required /></Field>
       <div className="grid gap-4 md:grid-cols-2">
         <Field label="Project type">
@@ -46,7 +46,7 @@ export function CreateProjectForm() {
 function Submit() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="justify-self-start border border-[#C6A15C] bg-[#C6A15C] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#0A1C33] disabled:opacity-60">
+    <button type="submit" disabled={pending} className="justify-self-start border border-[#D6A84F] bg-[#D6A84F] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#05120C] disabled:opacity-60">
       {pending ? "Creating…" : "Create project"}
     </button>
   );
@@ -55,7 +55,7 @@ function Submit() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="mb-2 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">{label}</div>
+      <div className="mb-2 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#95A79C]">{label}</div>
       {children}
     </div>
   );

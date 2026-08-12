@@ -22,30 +22,30 @@ export default function PreviewPage() {
   const d = DEVICES[device];
 
   return (
-    <div className="min-h-screen bg-[#0B1E36] text-[#EDE7D6]" style={{ background: "radial-gradient(120% 90% at 50% 0%, #123152 0%, #081524 60%)" }}>
+    <div className="min-h-screen bg-[#031A14] text-[#F4F0E6]" style={{ background: "radial-gradient(120% 90% at 50% 0%, #0C3226 0%, #05120C 60%)" }}>
       <header className="mx-auto flex max-w-[1100px] flex-wrap items-center gap-4 px-6 py-5">
         <Link href="/" className="font-serif text-[22px] leading-none">
-          The <span className="italic text-[#C6A15C]">Iloilo</span> Real Estate
+          The <span className="italic text-[#D6A84F]">Iloilo</span> Real Estate
         </Link>
-        <span className="rounded-full border border-[#C6A15C]/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#C6A15C]">App preview</span>
+        <span className="rounded-full border border-[#D6A84F]/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#D6A84F]">App preview</span>
         <div className="ml-auto flex items-center gap-2">
           {(Object.keys(DEVICES) as DeviceKey[]).map((k) => (
             <button
               key={k}
               onClick={() => setDevice(k)}
-              className={`rounded-full px-3.5 py-2 text-[12px] font-semibold transition-colors ${device === k ? "bg-[#C6A15C] text-[#0B1E36]" : "border border-[#2A4B6B] text-[#9DB0C0] hover:text-[#EDE7D6]"}`}
+              className={`rounded-full px-3.5 py-2 text-[12px] font-semibold transition-colors ${device === k ? "bg-[#D6A84F] text-[#031A14]" : "border border-[#245140] text-[#AABBB0] hover:text-[#F4F0E6]"}`}
             >
               {DEVICES[k].label}
             </button>
           ))}
-          <a href={start} target="_blank" rel="noreferrer" className="rounded-full border border-[#2A4B6B] px-3.5 py-2 text-[12px] font-semibold text-[#9DB0C0] hover:text-[#EDE7D6]">
+          <a href={start} target="_blank" rel="noreferrer" className="rounded-full border border-[#245140] px-3.5 py-2 text-[12px] font-semibold text-[#AABBB0] hover:text-[#F4F0E6]">
             Open full app ↗
           </a>
         </div>
       </header>
 
       <div className="mx-auto flex max-w-[1100px] flex-col items-center px-6 pb-16">
-        <p className="mb-6 max-w-md text-center text-[13.5px] leading-relaxed text-[#9DB0C0]">
+        <p className="mb-6 max-w-md text-center text-[13.5px] leading-relaxed text-[#AABBB0]">
           A live preview of the mobile app running the production build. This is exactly what ships to the App Store &amp; Google Play (via Capacitor).
         </p>
 
@@ -62,7 +62,7 @@ export default function PreviewPage() {
             <button
               key={href}
               onClick={() => { setStart(href); setNonce((n) => n + 1); }}
-              className={`rounded-full px-3.5 py-2 text-[12px] font-semibold transition-colors ${start === href ? "bg-[#C6A15C] text-[#0B1E36]" : "border border-[#2A4B6B] text-[#9DB0C0] hover:text-[#EDE7D6]"}`}
+              className={`rounded-full px-3.5 py-2 text-[12px] font-semibold transition-colors ${start === href ? "bg-[#D6A84F] text-[#031A14]" : "border border-[#245140] text-[#AABBB0] hover:text-[#F4F0E6]"}`}
             >
               {label}
             </button>
@@ -89,10 +89,10 @@ export default function PreviewPage() {
         </div>
 
         <div className="mt-6 flex items-center gap-3">
-          <button onClick={() => setNonce((n) => n + 1)} className="rounded-full border border-[#2A4B6B] px-4 py-2 text-[12px] font-semibold text-[#9DB0C0] hover:text-[#EDE7D6]">
+          <button onClick={() => setNonce((n) => n + 1)} className="rounded-full border border-[#245140] px-4 py-2 text-[12px] font-semibold text-[#AABBB0] hover:text-[#F4F0E6]">
             ↻ Reload
           </button>
-          <span className="text-[12px] text-[#5E7488]">Tip: resize your browser — it stays a phone.</span>
+          <span className="text-[12px] text-[#61796C]">Tip: resize your browser — it stays a phone.</span>
         </div>
       </div>
     </div>

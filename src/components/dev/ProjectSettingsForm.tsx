@@ -34,7 +34,7 @@ export function ProjectSettingsForm({ project }: { project: Project }) {
           <input name="defaultCommission" type="number" step="0.1" min="0" max="100" defaultValue={project.defaultCommission ?? ""} className="dfield" placeholder="3" />
         </Field>
       </div>
-      <button type="submit" className="justify-self-start border border-[#274563] px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#C6A15C] hover:text-[#C6A15C]">Save settings</button>
+      <button type="submit" className="justify-self-start border border-[#245140] px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#D6A84F] hover:text-[#D6A84F]">Save settings</button>
     </form>
   );
 }
@@ -42,9 +42,9 @@ export function ProjectSettingsForm({ project }: { project: Project }) {
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">{label}</div>
+      <div className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#95A79C]">{label}</div>
       {children}
-      {hint && <div className="mt-1 text-[10.5px] text-[#46617A]">{hint}</div>}
+      {hint && <div className="mt-1 text-[10.5px] text-[#4A6353]">{hint}</div>}
     </div>
   );
 }

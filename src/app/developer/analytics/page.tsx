@@ -48,7 +48,7 @@ export default async function DeveloperAnalytics() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] text-left text-[13.5px]">
             <thead>
-              <tr className="border-b border-[#1A3550] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">
+              <tr className="border-b border-[#183A2B] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#95A79C]">
                 <th className="py-3 pr-4">Project</th>
                 <th className="py-3 pr-4">Views</th>
                 <th className="py-3 pr-4">Leads</th>
@@ -60,17 +60,17 @@ export default async function DeveloperAnalytics() {
             </thead>
             <tbody>
               {projectRows.map((r) => (
-                <tr key={r.name} className="border-b border-[#1A3550]">
+                <tr key={r.name} className="border-b border-[#183A2B]">
                   <td className="py-3 pr-4 font-medium">{r.name}</td>
                   <td className="py-3 pr-4 tabular-nums">{r.views.toLocaleString()}</td>
                   <td className="py-3 pr-4 tabular-nums">{r.leads}</td>
-                  <td className="py-3 pr-4 tabular-nums text-[#8AA0B4]">{r.viewings}</td>
+                  <td className="py-3 pr-4 tabular-nums text-[#95A79C]">{r.viewings}</td>
                   <td className="py-3 pr-4 tabular-nums text-[#E2712B]">{r.reservations}</td>
-                  <td className="py-3 pr-4 tabular-nums text-[#5FA39C]">{r.sales}</td>
-                  <td className="py-3 text-[#C6A15C]">{r.conversion}</td>
+                  <td className="py-3 pr-4 tabular-nums text-[#6FB58F]">{r.sales}</td>
+                  <td className="py-3 text-[#D6A84F]">{r.conversion}</td>
                 </tr>
               ))}
-              {projectRows.length === 0 && <tr><td colSpan={7} className="py-4 text-center text-[#8AA0B4]">No projects yet.</td></tr>}
+              {projectRows.length === 0 && <tr><td colSpan={7} className="py-4 text-center text-[#95A79C]">No projects yet.</td></tr>}
             </tbody>
           </table>
         </div>
@@ -79,11 +79,11 @@ export default async function DeveloperAnalytics() {
       <div className="mt-6">
         <Panel title="Agent performance">
           {agentPerf.length === 0 ? (
-            <p className="py-4 text-center text-[13.5px] text-[#8AA0B4]">No agent activity yet.</p>
+            <p className="py-4 text-center text-[13.5px] text-[#95A79C]">No agent activity yet.</p>
           ) : (
             <table className="w-full text-left text-[13.5px]">
               <thead>
-                <tr className="border-b border-[#1A3550] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">
+                <tr className="border-b border-[#183A2B] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#95A79C]">
                   <th className="py-3 pr-4">Agent</th>
                   <th className="py-3 pr-4">Agency</th>
                   <th className="py-3 pr-4">Leads</th>
@@ -92,11 +92,11 @@ export default async function DeveloperAnalytics() {
               </thead>
               <tbody>
                 {agentPerf.map((a) => (
-                  <tr key={a.name} className="border-b border-[#1A3550]">
+                  <tr key={a.name} className="border-b border-[#183A2B]">
                     <td className="py-3 pr-4 font-medium">{a.name}</td>
-                    <td className="py-3 pr-4 text-[#8AA0B4]">{a.company || "—"}</td>
+                    <td className="py-3 pr-4 text-[#95A79C]">{a.company || "—"}</td>
                     <td className="py-3 pr-4 tabular-nums">{a.leads}</td>
-                    <td className="py-3 tabular-nums text-[#5FA39C]">{a.sales}</td>
+                    <td className="py-3 tabular-nums text-[#6FB58F]">{a.sales}</td>
                   </tr>
                 ))}
               </tbody>

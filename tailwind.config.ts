@@ -1,10 +1,11 @@
 import type { Config } from "tailwindcss";
 
 /**
- * The Iloilo Real Estate — brand design tokens.
- * Identity: deep navy + antique gold + teal on warm cream. "Connecting people.
- * Building futures." (from the brand kit). Buyer app is light (cream/navy/gold);
- * dashboards + marketing use the navy/gold dark theme (hex in components/dash).
+ * The Iloilo Real Estate — brand design tokens (per brand guide).
+ * Deep forest green #031A14 + rich black #050706 + champagne gold #D6A84F +
+ * ivory #F4F0E6. Ratio: green/black dominant, ivory, gold as accent, gold-hi
+ * sparingly. Buyer app is light (ivory/green/gold); dashboards + marketing use
+ * the forest-green/black dark theme (hex live in components/dash).
  */
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
@@ -12,49 +13,45 @@ const config: Config = {
     extend: {
       colors: {
         // light surfaces (buyer app)
-        page: "#EFE7D5",
-        app: "#FAF6EC",
+        page: "#EFEADC",
+        app: "#F4F0E6", // brand ivory
         surface: "#FFFFFF",
-        "surface-warm": "#F7F0E0",
-        sand: "#EFE6D2",
-        // ink = brand navy
+        "surface-warm": "#FBF6EA",
+        sand: "#ECE4D1",
+        // ink = deep forest green (text + primary buttons)
         ink: {
-          DEFAULT: "#0B1E36",
-          2: "#24384F",
-          3: "#45586E",
+          DEFAULT: "#031A14",
+          2: "#1E3A30",
+          3: "#3F564B",
         },
         muted: {
-          DEFAULT: "#5C6B7C",
-          2: "#8592A0",
+          DEFAULT: "#5C6B62",
+          2: "#87938A",
         },
-        // accent = antique gold (readable on cream + as button bg)
+        // accent = readable champagne gold (links, CTAs, badges)
         accent: {
-          DEFAULT: "#9A7B39",
-          soft: "#F3EAD3",
+          DEFAULT: "#9A7A2A",
+          soft: "#F5EBD2",
         },
-        // bright metallic gold for decorative marks/borders
+        // brand champagne gold + highlight (decorative / on dark)
         gold: {
-          DEFAULT: "#C6A15C",
-          deep: "#9A7B39",
-        },
-        // brand teal (secondary / verified)
-        teal: {
-          DEFAULT: "#123F3C",
-          soft: "#E3EFEB",
+          DEFAULT: "#D6A84F",
+          hi: "#F3D38A",
+          deep: "#9A7A2A",
         },
         success: {
-          DEFAULT: "#2C6E63",
-          soft: "#E3EFEB",
+          DEFAULT: "#2E6B4B",
+          soft: "#E4EFE7",
         },
         line: {
-          DEFAULT: "#E4DAC5",
-          2: "#F0E9DA",
-          3: "#DFD4BE",
+          DEFAULT: "#E5DCC8",
+          2: "#EFE9DA",
+          3: "#DED3BC",
         },
         map: {
-          bg: "#E7EEE9",
-          road: "#DBE6DE",
-          water: "#CFE0E2",
+          bg: "#E7EDE7",
+          road: "#DBE4DB",
+          water: "#CFDFD8",
         },
       },
       fontFamily: {
@@ -66,12 +63,12 @@ const config: Config = {
         xl2: "20px",
       },
       boxShadow: {
-        card: "0 1px 3px rgba(11,30,54,.06)",
-        "card-hover": "0 2px 6px rgba(11,30,54,.07), 0 18px 36px -18px rgba(11,30,54,.28)",
-        elev: "0 1px 3px rgba(11,30,54,.06), 0 8px 24px -16px rgba(11,30,54,.18)",
-        cta: "0 1px 3px rgba(11,30,54,.07), 0 10px 26px -18px rgba(11,30,54,.24)",
-        pop: "0 8px 30px -8px rgba(11,30,54,.32)",
-        float: "0 2px 8px rgba(11,30,54,.16)",
+        card: "0 1px 3px rgba(3,26,20,.07)",
+        "card-hover": "0 2px 6px rgba(3,26,20,.08), 0 18px 36px -18px rgba(3,26,20,.3)",
+        elev: "0 1px 3px rgba(3,26,20,.07), 0 8px 24px -16px rgba(3,26,20,.2)",
+        cta: "0 1px 3px rgba(3,26,20,.08), 0 10px 26px -18px rgba(3,26,20,.26)",
+        pop: "0 8px 30px -8px rgba(3,26,20,.34)",
+        float: "0 2px 8px rgba(3,26,20,.18)",
       },
       keyframes: {
         appIn: { from: { opacity: "0", transform: "translateY(10px)" }, to: { opacity: "1", transform: "none" } },
@@ -80,7 +77,7 @@ const config: Config = {
         popA: { "0%": { transform: "scale(1)" }, "40%": { transform: "scale(1.45)" }, "70%": { transform: "scale(.9)" }, "100%": { transform: "scale(1)" } },
         shimA: { "0%": { opacity: ".5" }, "50%": { opacity: "1" }, "100%": { opacity: ".5" } },
         toastA: { from: { opacity: "0", transform: "translate(-50%,16px)" }, to: { opacity: "1", transform: "translate(-50%,0)" } },
-        ringA: { "0%": { boxShadow: "0 0 0 0 rgba(154,123,57,.4)" }, "70%": { boxShadow: "0 0 0 12px rgba(154,123,57,0)" }, "100%": { boxShadow: "0 0 0 0 rgba(154,123,57,0)" } },
+        ringA: { "0%": { boxShadow: "0 0 0 0 rgba(214,168,79,.45)" }, "70%": { boxShadow: "0 0 0 12px rgba(214,168,79,0)" }, "100%": { boxShadow: "0 0 0 0 rgba(214,168,79,0)" } },
       },
       animation: {
         appIn: "appIn .5s ease",

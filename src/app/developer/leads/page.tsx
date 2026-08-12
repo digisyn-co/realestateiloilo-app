@@ -20,12 +20,12 @@ export default async function DeveloperLeads() {
       <PageTitle title="Leads" subtitle={`${leads.length} across your projects · ownership shown per lead (brief §18)`} />
       <Panel>
         {leads.length === 0 ? (
-          <p className="py-6 text-center text-[13.5px] text-[#8AA0B4]">No leads yet.</p>
+          <p className="py-6 text-center text-[13.5px] text-[#95A79C]">No leads yet.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-left text-[13.5px]">
               <thead>
-                <tr className="border-b border-[#1A3550] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">
+                <tr className="border-b border-[#183A2B] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#95A79C]">
                   <th className="py-3 pr-4">Client</th>
                   <th className="py-3 pr-4">Project</th>
                   <th className="py-3 pr-4">Source</th>
@@ -37,17 +37,17 @@ export default async function DeveloperLeads() {
               </thead>
               <tbody>
                 {leads.map((l) => (
-                  <tr key={l.id} className="border-b border-[#1A3550]">
+                  <tr key={l.id} className="border-b border-[#183A2B]">
                     <td className="py-3 pr-4">
                       <div className="font-medium">{l.name}</div>
-                      <div className="text-[11.5px] text-[#8AA0B4]">{l.contact || l.email || ""}{l.budget ? ` · ${l.budget}` : ""}</div>
+                      <div className="text-[11.5px] text-[#95A79C]">{l.contact || l.email || ""}{l.budget ? ` · ${l.budget}` : ""}</div>
                     </td>
-                    <td className="py-3 pr-4 text-[#8AA0B4]">{l.project.name}</td>
-                    <td className="py-3 pr-4 text-[#8AA0B4]">{l.source}</td>
-                    <td className="py-3 pr-4 text-[#8AA0B4]">{l.agent?.user.name || "—"}</td>
-                    <td className="py-3 pr-4"><span className="text-[11px] font-semibold uppercase tracking-wide text-[#C6A15C]">{l.ownership}</span></td>
-                    <td className="py-3 pr-4 text-[#8AA0B4]">{l.status}</td>
-                    <td className="py-3 text-[11px] text-[#46617A]">{timeAgo(l.createdAt)}</td>
+                    <td className="py-3 pr-4 text-[#95A79C]">{l.project.name}</td>
+                    <td className="py-3 pr-4 text-[#95A79C]">{l.source}</td>
+                    <td className="py-3 pr-4 text-[#95A79C]">{l.agent?.user.name || "—"}</td>
+                    <td className="py-3 pr-4"><span className="text-[11px] font-semibold uppercase tracking-wide text-[#D6A84F]">{l.ownership}</span></td>
+                    <td className="py-3 pr-4 text-[#95A79C]">{l.status}</td>
+                    <td className="py-3 text-[11px] text-[#4A6353]">{timeAgo(l.createdAt)}</td>
                   </tr>
                 ))}
               </tbody>
