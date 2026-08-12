@@ -15,10 +15,10 @@ export async function AppHeader() {
       className="sticky top-0 z-40 bg-[#031A14]"
       style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
-      <div className="mx-auto flex h-[58px] max-w-[1200px] items-center gap-3 px-4">
+      <div className="mx-auto flex h-[70px] max-w-[1200px] items-center gap-3 px-4">
         <Link href="/browse" className="flex flex-none items-center" aria-label="The Iloilo Real Estate — Home">
-          {/* horizontal lockup sits on the dark header seamlessly */}
-          <BrandLogo variant="horizontal" className="h-8 w-auto md:h-9" />
+          {/* horizontal lockup (transparent gold+ivory) on the dark header */}
+          <BrandLogo variant="horizontal" className="h-12 w-auto md:h-14" />
         </Link>
 
         <nav className="ml-4 hidden items-center gap-1 lg:flex">
