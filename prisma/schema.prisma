@@ -12,8 +12,13 @@ datasource db {
   // Postgres for production (Vercel). For zero-setup local dev you can switch
   // this to "sqlite" and set DATABASE_URL="file:./dev.db" — the schema is
   // written to be portable across both (no provider-specific features).
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // Runtime uses the pooled connection (Supabase transaction pooler, port 6543).
+  url       = env("DATABASE_URL")
+  // Migrations / `prisma db push` use a direct connection (port 5432). Only the
+  // Prisma CLI reads this; the app runtime never does. Set it to the direct
+  // Supabase string (or the same value as DATABASE_URL if you only have one).
+  directUrl = env("DIRECT_URL")
 }
 
 // ---------------------------------------------------------------------------
