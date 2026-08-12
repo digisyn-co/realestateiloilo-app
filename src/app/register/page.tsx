@@ -4,6 +4,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import Link from "next/link";
 import { useState } from "react";
 import { registerAction, type AuthState } from "@/lib/auth-actions";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export default function RegisterPage() {
   const [state, action] = useFormState<AuthState, FormData>(registerAction, {});
@@ -15,8 +16,8 @@ export default function RegisterPage() {
   return (
     <div className="grid min-h-screen place-items-center bg-app px-5 py-10">
       <div className="w-full max-w-[420px]">
-        <Link href="/" className="mb-1 block text-center font-serif text-[30px] text-ink">
-          The <span className="italic text-accent">Iloilo</span> Real Estate
+        <Link href="/" className="mb-1 flex justify-center text-center font-serif text-[30px] text-ink">
+          <BrandLogo variant="full" width={200} />
         </Link>
         <p className="mb-8 text-center font-sans text-[14px] text-muted">Create your account.</p>
 

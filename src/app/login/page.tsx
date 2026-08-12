@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { loginAction, type AuthState } from "@/lib/auth-actions";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export default function LoginPage() {
   return (
@@ -21,8 +22,8 @@ function LoginInner() {
   return (
     <div className="grid min-h-screen place-items-center bg-app px-5 py-10">
       <div className="w-full max-w-[400px]">
-        <Link href="/" className="mb-1 block text-center font-serif text-[30px] text-ink">
-          The <span className="italic text-accent">Iloilo</span> Real Estate
+        <Link href="/" className="mb-1 flex justify-center text-center font-serif text-[30px] text-ink">
+          <BrandLogo variant="full" width={200} />
         </Link>
         <p className="mb-8 text-center font-sans text-[14px] text-muted">Welcome back — sign in to save homes and message brokers.</p>
 
