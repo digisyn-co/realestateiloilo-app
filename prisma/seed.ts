@@ -151,6 +151,7 @@ async function main() {
   await prisma.notification.create({ data: { userId: buyer.id, type: "STATUS_CHANGED", title: "Price drop on a saved home", body: "Modern 3-Bedroom Family Home dropped 6%.", href: "/saved" } });
 
   await seedImports(admin.id, agents[0].agent!.id, created);
+  await seedBrokerage(pw, agents[0]);
   const devUnits = await seedDevelopers(pw, admin.id, agents, buyer.id);
 
   console.log(`Seeded ${created.length} listings, ${agents.length} brokers, ${devUnits} developer units across 3 projects, admin + buyers.`);
@@ -270,6 +271,50 @@ async function seedDevelopers(
 
   await prisma.auditLog.create({ data: { actorId: adminId, action: "DEVELOPER_SEEDED", entity: "Developer", entityId: developerId, meta: JSON.stringify({ projects: projects.length, units: totalUnits }) } });
   return totalUnits;
+}
+
+// Brokerage hierarchy: head broker (Carla) + member agents + a pending listing.
+async function seedBrokerage(
+  pw: string,
+  head: Awaited<ReturnType<typeof prisma.user.create>> & { agent: { id: string } | null },
+) {
+  const headAgentId = head.agent!.id;
+  const memberSeeds = [
+    { name: "Miguel Fuentes", email: "miguel@ilonggorealty.ph", title: "Senior Agent" },
+    { name: "Bea Cordero", email: "bea@ilonggorealty.ph", title: "Agent" },
+  ];
+  const members: Array<Awaited<ReturnType<typeof prisma.user.create>> & { agent: { id: string } | null }> = [];
+  for (const m of memberSeeds) {
+    const u = await prisma.user.create({
+      data: {
+        name: m.name, email: m.email, phone: "+63 917 555 " + (4000 + members.length), role: "AGENT", passwordHash: pw,
+        verificationStatus: "VERIFIED",
+        agent: { create: { company: "Ilonggo Realty & Co.", title: m.title, headBrokerId: headAgentId, verified: true, contactEmail: m.email } },
+      },
+      include: { agent: true },
+    });
+    members.push(u);
+  }
+
+  // A member's listing awaiting the head broker's approval.
+  const area = areaByName("Jaro");
+  const property = await prisma.property.create({
+    data: {
+      title: "Cozy 2-Bedroom Starter Home in Jaro", description: "A neat starter home near Jaro Plaza, freshly painted with a small yard. Submitted by a team agent for broker review.",
+      propertyType: "HOUSE", address: "Sambag, Jaro", barangay: "Sambag", city: "Jaro", province: "Iloilo",
+      latitude: area?.lat, longitude: area?.lng, bedrooms: 2, bathrooms: 1, floorArea: 78, lotArea: 110, parking: 1,
+    },
+  });
+  await prisma.listing.create({
+    data: {
+      propertyId: property.id, agentId: members[0].agent!.id, listingType: "SALE", price: 3_250_000,
+      status: "PENDING_BROKER_REVIEW", verificationStatus: "PENDING", importMethod: "NATIVE",
+      images: { create: [{ url: "/property-images/a9.png", source: "ORIGINAL_UPLOAD", rightsStatus: "OWNED", sortOrder: 0 }] },
+    },
+  });
+  await prisma.notification.create({
+    data: { userId: head.id, type: "AGENT_LISTING_SUBMITTED", title: "Listing awaiting your approval", body: `${members[0].name} submitted "Cozy 2-Bedroom Starter Home in Jaro".`, href: "/dashboard/review" },
+  });
 }
 
 async function seedImports(adminId: string, agentId: string, created: { id: string; seed: Seed }[]) {

@@ -49,6 +49,7 @@ export const FURNISHING_LABELS: Record<Furnishing, string> = {
 
 export const LISTING_STATUS = [
   "DRAFT",
+  "PENDING_BROKER_REVIEW", // agent submitted; awaiting head broker's approval
   "PENDING_REVIEW",
   "ACTIVE",
   "RESERVED",
@@ -190,5 +191,9 @@ export const NOTIFICATION_TYPES = [
   "RESERVATION_REJECTED",
   "NEW_PROJECT_LEAD",
   "DEVELOPER_VERIFIED",
+  "AGENT_LISTING_SUBMITTED",
+  "LISTING_BROKER_APPROVED",
+  "LISTING_BROKER_REJECTED",
+  "AGENT_ACCOUNT_CREATED",
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

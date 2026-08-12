@@ -9,7 +9,7 @@ import { setListingStatusAction } from "@/lib/dashboard-actions";
 export const dynamic = "force-dynamic";
 
 const STATUS_TONE: Record<string, string> = {
-  ACTIVE: "#6FB58F", PENDING_REVIEW: "#D6A84F", DRAFT: "#95A79C", RESERVED: "#E2712B",
+  ACTIVE: "#6FB58F", PENDING_BROKER_REVIEW: "#D6A84F", PENDING_REVIEW: "#D6A84F", DRAFT: "#95A79C", RESERVED: "#E2712B",
   SOLD: "#95A79C", RENTED: "#95A79C", REJECTED: "#C05B4A", EXPIRED: "#95A79C", ARCHIVED: "#95A79C",
 };
 

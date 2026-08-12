@@ -110,6 +110,12 @@ export async function requireDeveloper(): Promise<SessionUser | null> {
   if (!user || (user.role !== "DEVELOPER" && user.role !== "ADMIN")) return null;
   return user;
 }
+/** Head-broker guard — a BROKER leads a brokerage (creates + approves agents). */
+export async function requireHeadBroker(): Promise<SessionUser | null> {
+  const user = await getSessionUser();
+  if (!user || (user.role !== "BROKER" && user.role !== "ADMIN")) return null;
+  return user;
+}
 
 export async function authenticate(email: string, password: string): Promise<SessionUser | null> {
   const user = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() }, include: { agent: true, developer: true } });
