@@ -39,6 +39,7 @@ yarn-error.log*
 .vscode/*
 !.vscode/extensions.json
 .idea
+.claude/
 
 # capacitor / native build artifacts (the ios/ & android/ projects ARE committed;
 # only their generated build outputs are ignored)
