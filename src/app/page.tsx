@@ -65,6 +65,7 @@ export default async function Home() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-[#05120C]/70 via-[#05120C]/20 to-[#05120C]" />
         <div className="relative mx-auto flex h-full max-w-[1360px] flex-col justify-end px-6 pb-16">
+          <BrandLogo variant="full" width={280} className="mb-7 drop-shadow-[0_10px_30px_rgba(0,0,0,.5)]" />
           <div className="mb-5 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#D6A84F]">
             Real Estate Made Easy in Iloilo
           </div>
