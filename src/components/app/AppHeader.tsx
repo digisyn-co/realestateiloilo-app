@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Bell, Mail, Sparkles } from "lucide-react";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { BrandLogo } from "@/components/BrandLogo";
 
 // Desktop top nav + mobile brand header for the buyer app surface.
 export async function AppHeader() {
@@ -12,8 +13,11 @@ export async function AppHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line-2 bg-app/90 backdrop-blur">
       <div className="mx-auto flex h-[62px] max-w-[1200px] items-center gap-4 px-4">
-        <Link href="/browse" className="font-serif text-[24px] leading-none text-ink">
-          The <span className="italic text-accent">Iloilo</span> Real Estate
+        <Link href="/browse" className="flex items-center gap-2.5">
+          <BrandLogo variant="mark" width={32} className="rounded-[8px]" />
+          <span className="font-serif text-[22px] leading-none text-ink">
+            The <span className="italic text-accent">Iloilo</span> Real Estate
+          </span>
         </Link>
 
         <nav className="ml-6 hidden items-center gap-1 md:flex">

@@ -22,8 +22,11 @@ function LoginInner() {
   return (
     <div className="grid min-h-screen place-items-center bg-app px-5 py-10">
       <div className="w-full max-w-[400px]">
-        <Link href="/" className="mb-1 flex justify-center text-center font-serif text-[30px] text-ink">
-          <BrandLogo variant="full" width={200} />
+        <Link href="/" className="mb-3 flex flex-col items-center gap-3 text-center">
+          <BrandLogo variant="mark" width={74} className="rounded-[18px] shadow-card" />
+          <span className="font-serif text-[26px] leading-none text-ink">
+            The <span className="italic text-accent">Iloilo</span> Real Estate
+          </span>
         </Link>
         <p className="mb-8 text-center font-sans text-[14px] text-muted">Welcome back — sign in to save homes and message brokers.</p>
 

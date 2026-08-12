@@ -54,3 +54,4 @@ yarn-error.log*
 /android/local.properties
 /android/app/src/main/assets/public
 .DS_Store
+/icons

@@ -21,7 +21,7 @@
     "cap:sync": "cap sync",
     "cap:ios": "cap open ios",
     "cap:android": "cap open android",
-    "mobile:icons": "capacitor-assets generate --iconBackgroundColor '#B4551A' --iconBackgroundColorDark '#B4551A' --splashBackgroundColor '#FBF8F3' --splashBackgroundColorDark '#0B0A08'"
+    "mobile:icons": "capacitor-assets generate --assetPath assets --iconBackgroundColor '#031A14' --iconBackgroundColorDark '#031A14' --splashBackgroundColor '#031A14' --splashBackgroundColorDark '#050706'"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@capacitor/android": "^6.2.1",
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^6.2.1",
     "@capacitor/ios": "^6.2.1",
     "@types/bcryptjs": "^2.4.6",
