@@ -80,20 +80,34 @@ server: { url: "http://<your-LAN-ip>:3000", cleartext: true }
 
 Run `npm run dev`, `npm run cap:sync`, then run from Xcode/Android Studio.
 
-## Push notifications — remaining setup
+## Push notifications — OneSignal
 
-Client registration is wired (`NativeBridge` → `/api/push/register`, stored in the
-`PushDevice` table). To actually **deliver** pushes you still need:
+Push is powered by **OneSignal** (App ID `64e5cdb3-eb9d-4d24-89a3-d22ee80ba228`,
+set as `NEXT_PUBLIC_ONESIGNAL_APP_ID`). One component — `src/components/native/
+OneSignalInit.tsx` — initializes the right SDK per platform:
 
-1. **iOS:** an APNs key in your Apple Developer account; enable the Push
-   Notifications capability in Xcode.
-2. **Android:** a Firebase project; drop `google-services.json` into
-   `android/app/` and add the FCM plugin config.
-3. **A server sender:** send to stored tokens on events (new inquiry, listing
-   approved, reservation, price drop) — the in-app `Notification` model already
-   records these; add a sender that fans them out to APNs/FCM.
+- **Native app:** the `onesignal-cordova-plugin` (already installed + synced into
+  `ios/` and `android/`). It registers the device, requests permission, links the
+  logged-in user via `OneSignal.login(userId)`, and deep-links on notification tap.
+- **Web:** the OneSignal Web SDK v16, with the service worker at
+  `public/OneSignalSDKWorker.js`.
 
-Set the relevant keys via env (see `.env.example`), keep them out of the repo.
+To finish enabling **delivery**, in the OneSignal dashboard:
+
+1. **iOS** → upload your **APNs key** (.p8) from the Apple Developer portal. In
+   Xcode enable the **Push Notifications** + **Background Modes → Remote
+   notifications** capabilities. For rich/confirmed push, add a **Notification
+   Service Extension** target (`OneSignalXCFramework/OneSignal` pod) — see the
+   OneSignal iOS guide.
+2. **Android** → create a **Firebase** project and paste the FCM **Service Account
+   JSON** into OneSignal. `google-services.json` is not required by the plugin.
+3. **Web** → under **Settings → Push & In-App → Web**, set the Site URL to your
+   production origin and a 256×256 icon.
+
+Then send from the OneSignal dashboard, or from your backend using
+`ONESIGNAL_REST_API_KEY` — target `external_id` = the app's user id. The in-app
+`Notification` model already records events (inquiry, approval, reservation, price
+drop) you can fan out to OneSignal.
 
 ## App Store review note
 

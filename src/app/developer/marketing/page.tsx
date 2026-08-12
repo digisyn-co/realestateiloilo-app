@@ -20,9 +20,9 @@ export default async function DeveloperMarketing() {
       <Panel title={`Library · ${docs.length}`}>
         {docs.length === 0 ? (
           <div className="py-8 text-center">
-            <p className="text-[13.5px] text-[#8A8074]">No materials uploaded yet.</p>
-            <p className="mt-2 text-[12px] text-[#4E4840]">
-              File uploads route through the storage adapter (see <code className="text-[#C9A227]">.env</code> <code>STORAGE_PROVIDER</code>). Each material carries a visibility flag —
+            <p className="text-[13.5px] text-[#8AA0B4]">No materials uploaded yet.</p>
+            <p className="mt-2 text-[12px] text-[#46617A]">
+              File uploads route through the storage adapter (see <code className="text-[#C6A15C]">.env</code> <code>STORAGE_PROVIDER</code>). Each material carries a visibility flag —
               agent-only files are never served to public users, enforced server-side.
             </p>
           </div>
@@ -30,7 +30,7 @@ export default async function DeveloperMarketing() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[560px] text-left text-[13.5px]">
               <thead>
-                <tr className="border-b border-[#1D1B16] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8A8074]">
+                <tr className="border-b border-[#1A3550] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">
                   <th className="py-3 pr-4">Title</th>
                   <th className="py-3 pr-4">Type</th>
                   <th className="py-3 pr-4">Project</th>
@@ -39,12 +39,12 @@ export default async function DeveloperMarketing() {
               </thead>
               <tbody>
                 {docs.map((d) => (
-                  <tr key={d.id} className="border-b border-[#1D1B16]">
+                  <tr key={d.id} className="border-b border-[#1A3550]">
                     <td className="py-3 pr-4 font-medium">{d.title}</td>
-                    <td className="py-3 pr-4 text-[#8A8074]">{d.type.replace(/_/g, " ").toLowerCase()}</td>
-                    <td className="py-3 pr-4 text-[#8A8074]">{d.project.name}</td>
+                    <td className="py-3 pr-4 text-[#8AA0B4]">{d.type.replace(/_/g, " ").toLowerCase()}</td>
+                    <td className="py-3 pr-4 text-[#8AA0B4]">{d.project.name}</td>
                     <td className="py-3">
-                      <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: d.visibility === "AGENT_ONLY" ? "#E2712B" : "#7E9877" }}>
+                      <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: d.visibility === "AGENT_ONLY" ? "#E2712B" : "#5FA39C" }}>
                         {d.visibility.replace("_", " ").toLowerCase()}
                       </span>
                     </td>

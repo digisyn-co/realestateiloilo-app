@@ -74,8 +74,7 @@ export function NativeBridge() {
       };
       document.addEventListener("click", onClick, true);
 
-      // ---- Push notifications (best-effort; needs APNs/FCM creds to deliver) ----
-      registerPush().catch(() => {});
+      // Push notifications are handled by OneSignal (see OneSignalInit.tsx).
 
       cleanup = () => {
         backHandle?.remove();
@@ -88,38 +87,3 @@ export function NativeBridge() {
   return null;
 }
 
-/**
- * Registers the device for push. Requesting permission + registering is safe to
- * call even before the backend/credentials exist; delivery only works once APNs
- * (iOS) and FCM (Android) are configured and a server sends to the token. The
- * token is posted to /api/push/register so the backend can store it later.
- */
-async function registerPush() {
-  const { Capacitor } = await import("@capacitor/core");
-  if (!Capacitor.isNativePlatform()) return;
-  let PushNotifications: typeof import("@capacitor/push-notifications").PushNotifications;
-  try {
-    ({ PushNotifications } = await import("@capacitor/push-notifications"));
-  } catch {
-    return;
-  }
-  const perm = await PushNotifications.checkPermissions();
-  let status = perm.receive;
-  if (status === "prompt") status = (await PushNotifications.requestPermissions()).receive;
-  if (status !== "granted") return;
-
-  await PushNotifications.addListener("registration", async (token) => {
-    try {
-      await fetch("/api/push/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: token.value, platform: Capacitor.getPlatform() }),
-      });
-    } catch {}
-  });
-  await PushNotifications.addListener("pushNotificationActionPerformed", (action) => {
-    const href = action.notification?.data?.href;
-    if (typeof href === "string" && href.startsWith("/")) window.location.assign(href);
-  });
-  await PushNotifications.register();
-}

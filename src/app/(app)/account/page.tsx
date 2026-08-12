@@ -74,7 +74,7 @@ export default async function AccountPage() {
           <LogOut size={17} /> Sign out
         </button>
       </form>
-      <p className="mt-6 text-center font-sans text-[12px] text-muted-2">Real Estate Iloilo · Version 1.0.0 · Iloilo City</p>
+      <p className="mt-6 text-center font-sans text-[12px] text-muted-2">The Iloilo Real Estate · Version 1.0.0 · Iloilo City</p>
     </div>
   );
 }

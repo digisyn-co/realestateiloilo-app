@@ -23,7 +23,7 @@ export default async function DeveloperUnits() {
   return (
     <div>
       <PageTitle title="Unit inventory" subtitle="Inventory across all your projects." />
-      <div className="grid grid-cols-2 gap-px bg-[#1D1B16] md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-px bg-[#1A3550] md:grid-cols-4">
         <Kpi value={counts.total.toLocaleString()} label="Total units" tone="gold" />
         <Kpi value={counts.available.toLocaleString()} label="Available" tone="green" />
         <Kpi value={counts.reserved.toLocaleString()} label="Reserved" tone="orange" />
@@ -35,7 +35,7 @@ export default async function DeveloperUnits() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] text-left text-[13.5px]">
               <thead>
-                <tr className="border-b border-[#1D1B16] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8A8074]">
+                <tr className="border-b border-[#1A3550] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">
                   <th className="py-3 pr-4">Project</th>
                   <th className="py-3 pr-4">Total</th>
                   <th className="py-3 pr-4">Available</th>
@@ -46,19 +46,19 @@ export default async function DeveloperUnits() {
               </thead>
               <tbody>
                 {perProject.map(({ project, counts: c }) => (
-                  <tr key={project.id} className="border-b border-[#1D1B16]">
+                  <tr key={project.id} className="border-b border-[#1A3550]">
                     <td className="py-3 pr-4 font-medium">{project.name}</td>
                     <td className="py-3 pr-4 tabular-nums">{c.total}</td>
-                    <td className="py-3 pr-4 tabular-nums text-[#7E9877]">{c.available}</td>
+                    <td className="py-3 pr-4 tabular-nums text-[#5FA39C]">{c.available}</td>
                     <td className="py-3 pr-4 tabular-nums text-[#E2712B]">{c.reserved}</td>
-                    <td className="py-3 pr-4 tabular-nums text-[#8A8074]">{c.sold}</td>
-                    <td className="py-3"><Link href={`/developer/projects/${project.id}/units`} className="text-[12px] text-[#C9A227]">Manage →</Link></td>
+                    <td className="py-3 pr-4 tabular-nums text-[#8AA0B4]">{c.sold}</td>
+                    <td className="py-3"><Link href={`/developer/projects/${project.id}/units`} className="text-[12px] text-[#C6A15C]">Manage →</Link></td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="mt-3 text-[12px] text-[#8A8074]">Total inventory value: {formatPeso(value._sum.price || 0)}</p>
+          <p className="mt-3 text-[12px] text-[#8AA0B4]">Total inventory value: {formatPeso(value._sum.price || 0)}</p>
         </Panel>
       </div>
     </div>

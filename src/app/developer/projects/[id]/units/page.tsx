@@ -12,7 +12,7 @@ import { unitCountsFor, unitInventory } from "@/lib/developer/queries";
 export const dynamic = "force-dynamic";
 
 const STATUS_TONE: Record<string, string> = {
-  Available: "#7E9877", Reserved: "#E2712B", Sold: "#8A8074", "On hold": "#C9A227", "Under contract": "#C9A227", Unavailable: "#8A8074",
+  Available: "#5FA39C", Reserved: "#E2712B", Sold: "#8AA0B4", "On hold": "#C6A15C", "Under contract": "#C6A15C", Unavailable: "#8AA0B4",
 };
 
 export default async function ProjectUnitsPage({
@@ -47,12 +47,12 @@ export default async function ProjectUnitsPage({
   return (
     <div>
       <div className="mb-2">
-        <Link href={`/developer/projects/${project.id}`} className="text-[12px] text-[#8A8074] hover:text-[#C9A227]">← {project.name}</Link>
+        <Link href={`/developer/projects/${project.id}`} className="text-[12px] text-[#8AA0B4] hover:text-[#C6A15C]">← {project.name}</Link>
       </div>
       <PageTitle title="Unit inventory" subtitle={`${counts.total} total · ${counts.available} available · ${counts.reserved} reserved · ${counts.sold} sold`} />
 
       <div className="mb-6">
-        <Panel title="Bulk import" action={<span className="text-[11px] text-[#8A8074]">CSV / JSON</span>}>
+        <Panel title="Bulk import" action={<span className="text-[11px] text-[#8AA0B4]">CSV / JSON</span>}>
           <UnitImport projectId={project.id} />
         </Panel>
       </div>
@@ -64,12 +64,12 @@ export default async function ProjectUnitsPage({
 
       <Panel>
         {units.length === 0 ? (
-          <p className="py-6 text-center text-[13.5px] text-[#8A8074]">No units match. Add units or import inventory above.</p>
+          <p className="py-6 text-center text-[13.5px] text-[#8AA0B4]">No units match. Add units or import inventory above.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-left">
               <thead>
-                <tr className="border-b border-[#1D1B16] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8A8074]">
+                <tr className="border-b border-[#1A3550] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">
                   <th className="py-3 pr-4">Unit</th>
                   <th className="py-3 pr-4">Building</th>
                   <th className="py-3 pr-4">Type</th>
@@ -81,15 +81,15 @@ export default async function ProjectUnitsPage({
               </thead>
               <tbody>
                 {units.map((u) => (
-                  <tr key={u.id} className="border-b border-[#1D1B16] text-[13.5px]">
+                  <tr key={u.id} className="border-b border-[#1A3550] text-[13.5px]">
                     <td className="py-3 pr-4 font-medium">{u.unitNumber}</td>
-                    <td className="py-3 pr-4 text-[#8A8074]">{u.building || "—"}{u.floor != null ? ` · F${u.floor}` : ""}</td>
-                    <td className="py-3 pr-4 text-[#8A8074]">{u.unitType}</td>
-                    <td className="py-3 pr-4 tabular-nums text-[#8A8074]">{u.floorArea ? `${u.floorArea}m²` : "—"}</td>
+                    <td className="py-3 pr-4 text-[#8AA0B4]">{u.building || "—"}{u.floor != null ? ` · F${u.floor}` : ""}</td>
+                    <td className="py-3 pr-4 text-[#8AA0B4]">{u.unitType}</td>
+                    <td className="py-3 pr-4 tabular-nums text-[#8AA0B4]">{u.floorArea ? `${u.floorArea}m²` : "—"}</td>
                     <td className="py-3 pr-4 tabular-nums">{u.priceLabel}</td>
-                    <td className="py-3 pr-4 tabular-nums text-[#C9A227]">{u.agentPriceLabel || "—"}</td>
+                    <td className="py-3 pr-4 tabular-nums text-[#C6A15C]">{u.agentPriceLabel || "—"}</td>
                     <td className="py-3">
-                      <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: STATUS_TONE[u.status] || "#F4F0E6" }}>{u.status}</span>
+                      <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: STATUS_TONE[u.status] || "#EDE7D6" }}>{u.status}</span>
                     </td>
                   </tr>
                 ))}

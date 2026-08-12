@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { NativeBridge } from "@/components/native/NativeBridge";
+import { OneSignalInit } from "@/components/native/OneSignalInit";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -19,13 +20,13 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Real Estate Iloilo — every property in Iloilo, verified",
+  title: "The Iloilo Real Estate — every property in Iloilo, verified",
   description:
     "Homes, land, rentals and commercial property across Iloilo City and its neighbouring towns. Every listing checked before it goes live.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FBF8F3",
+  themeColor: "#FAF6EC",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1, // prevent zoom jank inside the native WebView
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${manrope.variable} ${instrumentSerif.variable}`}>
       <body className="font-sans antialiased">
         <NativeBridge />
+        <OneSignalInit />
         {children}
       </body>
     </html>

@@ -18,7 +18,7 @@ export default async function DeveloperSales() {
   return (
     <div>
       <PageTitle title="Sales" subtitle={`${sales.length} closed`} />
-      <div className="grid grid-cols-2 gap-px bg-[#1D1B16] md:grid-cols-3">
+      <div className="grid grid-cols-2 gap-px bg-[#1A3550] md:grid-cols-3">
         <Kpi value={sales.length} label="Units sold" tone="gold" />
         <Kpi value={formatPeso(total, { compact: true })} label="Sales value" tone="green" />
         <Kpi value={sales.filter((s) => s.agentId).length} label="Agent-assisted" />
@@ -26,12 +26,12 @@ export default async function DeveloperSales() {
       <div className="mt-6">
         <Panel>
           {sales.length === 0 ? (
-            <p className="py-6 text-center text-[13.5px] text-[#8A8074]">No sales recorded yet. Mark reserved units as sold from Reservations.</p>
+            <p className="py-6 text-center text-[13.5px] text-[#8AA0B4]">No sales recorded yet. Mark reserved units as sold from Reservations.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full min-w-[640px] text-left text-[13.5px]">
                 <thead>
-                  <tr className="border-b border-[#1D1B16] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8A8074]">
+                  <tr className="border-b border-[#1A3550] text-[8.5px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">
                     <th className="py-3 pr-4">Unit</th>
                     <th className="py-3 pr-4">Project</th>
                     <th className="py-3 pr-4">Buyer</th>
@@ -42,13 +42,13 @@ export default async function DeveloperSales() {
                 </thead>
                 <tbody>
                   {sales.map((s) => (
-                    <tr key={s.id} className="border-b border-[#1D1B16]">
+                    <tr key={s.id} className="border-b border-[#1A3550]">
                       <td className="py-3 pr-4 font-medium">{s.unit.unitNumber}</td>
-                      <td className="py-3 pr-4 text-[#8A8074]">{s.project.name}</td>
-                      <td className="py-3 pr-4 text-[#8A8074]">{s.buyerName}</td>
-                      <td className="py-3 pr-4 text-[#8A8074]">{s.agent?.user.name || "Direct"}</td>
+                      <td className="py-3 pr-4 text-[#8AA0B4]">{s.project.name}</td>
+                      <td className="py-3 pr-4 text-[#8AA0B4]">{s.buyerName}</td>
+                      <td className="py-3 pr-4 text-[#8AA0B4]">{s.agent?.user.name || "Direct"}</td>
                       <td className="py-3 pr-4 tabular-nums">{formatPeso(s.price)}</td>
-                      <td className="py-3 text-[#C9A227]">{s.commissionPct != null ? `${s.commissionPct}%` : "—"}</td>
+                      <td className="py-3 text-[#C6A15C]">{s.commissionPct != null ? `${s.commissionPct}%` : "—"}</td>
                     </tr>
                   ))}
                 </tbody>

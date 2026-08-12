@@ -26,15 +26,15 @@ export default async function SettingsPage() {
 
       <div className="mt-6">
         <Panel title="Verification documents">
-          <div className="grid gap-px bg-[#1D1B16]">
+          <div className="grid gap-px bg-[#1A3550]">
             {[
               ["PRC licence", agent?.verified ? "Verified" : "Pending"],
               ["Government ID", agent?.verified ? "Verified" : "Pending"],
               ["Brokerage certificate", agent?.verified ? "Verified" : "Not submitted"],
             ].map(([k, v]) => (
-              <div key={k} className="flex justify-between bg-[#0B0A08] px-4 py-3 text-[13.5px]">
-                <span className="text-[#8A8074]">{k}</span>
-                <span style={{ color: v === "Verified" ? "#7E9877" : "#C9A227" }}>{v}</span>
+              <div key={k} className="flex justify-between bg-[#0A1C33] px-4 py-3 text-[13.5px]">
+                <span className="text-[#8AA0B4]">{k}</span>
+                <span style={{ color: v === "Verified" ? "#5FA39C" : "#C6A15C" }}>{v}</span>
               </div>
             ))}
           </div>
@@ -44,9 +44,9 @@ export default async function SettingsPage() {
       <div className="mt-6">
         <Panel title="Notifications">
           {["New lead alerts", "Price alerts", "Viewing alerts", "Weekly performance summary"].map((n) => (
-            <label key={n} className="flex items-center justify-between border-b border-[#1D1B16] py-3 text-[14px] last:border-0">
+            <label key={n} className="flex items-center justify-between border-b border-[#1A3550] py-3 text-[14px] last:border-0">
               <span>{n}</span>
-              <input type="checkbox" defaultChecked className="h-4 w-4 accent-[#C9A227]" />
+              <input type="checkbox" defaultChecked className="h-4 w-4 accent-[#C6A15C]" />
             </label>
           ))}
         </Panel>
@@ -58,8 +58,8 @@ export default async function SettingsPage() {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8A8074]">{label}</div>
-      <div className="border border-[#26231E] bg-[#0B0A08] px-3.5 py-3 text-[14px]">{value}</div>
+      <div className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">{label}</div>
+      <div className="border border-[#1F3E5A] bg-[#0A1C33] px-3.5 py-3 text-[14px]">{value}</div>
     </div>
   );
 }

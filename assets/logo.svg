@@ -1,21 +1,48 @@
 <svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="30%" r="90%">
-      <stop offset="0%" stop-color="#C4611F"/>
-      <stop offset="100%" stop-color="#A84E17"/>
+    <radialGradient id="bg" cx="50%" cy="34%" r="85%">
+      <stop offset="0%" stop-color="#0E2540"/>
+      <stop offset="100%" stop-color="#081524"/>
     </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#DBBE7E"/>
+      <stop offset="50%" stop-color="#C6A15C"/>
+      <stop offset="100%" stop-color="#9A7B39"/>
+    </linearGradient>
   </defs>
+
   <rect width="1024" height="1024" fill="url(#bg)"/>
-  <!-- house mark in warm cream -->
-  <g fill="#FBF8F3">
-    <path d="M512 262 L788 470 L724 470 L724 476 L724 730 L300 730 L300 476 L300 470 L236 470 Z"/>
+  <rect x="70" y="70" width="884" height="884" rx="150" fill="none" stroke="url(#gold)" stroke-width="10" opacity="0.85"/>
+
+  <!-- suspension bridge arc + cables -->
+  <g stroke="url(#gold)" fill="none" stroke-linecap="round">
+    <path d="M250 470 Q512 250 774 470" stroke-width="14"/>
+    <g stroke-width="6" opacity="0.9">
+      <line x1="330" y1="392" x2="330" y2="500"/>
+      <line x1="410" y1="345" x2="410" y2="500"/>
+      <line x1="614" y1="345" x2="614" y2="500"/>
+      <line x1="694" y1="392" x2="694" y2="500"/>
+    </g>
+    <!-- towers -->
+    <line x1="300" y1="300" x2="300" y2="520" stroke-width="16"/>
+    <line x1="724" y1="300" x2="724" y2="520" stroke-width="16"/>
   </g>
-  <!-- door + window cut from the house (terracotta) -->
-  <g fill="#A84E17">
-    <rect x="466" y="566" width="92" height="164" rx="12"/>
-    <rect x="356" y="520" width="86" height="86" rx="10"/>
-    <rect x="582" y="520" width="86" height="86" rx="10"/>
+
+  <!-- central serif column: the "I" monogram -->
+  <g fill="url(#gold)">
+    <rect x="430" y="300" width="164" height="34" rx="6"/>
+    <rect x="484" y="300" width="56" height="330"/>
+    <rect x="410" y="610" width="204" height="40" rx="8"/>
+    <!-- L foot -->
+    <rect x="540" y="610" width="150" height="40" rx="8"/>
   </g>
-  <!-- serif wordmark initial -->
-  <text x="512" y="880" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="132" font-style="italic" fill="#FBF8F3">Iloilo</text>
+
+  <!-- waves -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M250 712 Q330 682 410 712 T570 712 T730 712 T774 706" stroke="#7FA6AC" stroke-width="16"/>
+    <path d="M270 760 Q350 732 430 760 T590 760 T752 760" stroke="#C6A15C" stroke-width="12" opacity="0.85"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="512" y="882" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="120" letter-spacing="6" fill="url(#gold)">ILOILO</text>
 </svg>

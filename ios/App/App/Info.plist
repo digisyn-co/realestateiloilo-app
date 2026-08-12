@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>Real Estate Iloilo</string>
+        <string>The Iloilo Real Estate</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -46,12 +46,12 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Real Estate Iloilo uses the camera so you can add photos to a property listing or inquiry.</string>
+	<string>The Iloilo Real Estate uses the camera so you can add photos to a property listing or inquiry.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Real Estate Iloilo needs access to your photos so you can attach property images.</string>
+	<string>The Iloilo Real Estate needs access to your photos so you can attach property images.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Real Estate Iloilo needs access to save property images you download.</string>
+	<string>The Iloilo Real Estate needs access to save property images you download.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Real Estate Iloilo uses your location to show properties near you on the map.</string>
+	<string>The Iloilo Real Estate uses your location to show properties near you on the map.</string>
 </dict>
 </plist>

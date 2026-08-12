@@ -29,19 +29,19 @@ export default async function ImportsPage() {
 
       <Panel title="Import from a URL">
         <ManualUrlForm />
-        <p className="mt-3 text-[12px] leading-relaxed text-[#8A8074]">
+        <p className="mt-3 text-[12px] leading-relaxed text-[#8AA0B4]">
           We retrieve only the metadata a page openly exposes (Open Graph / schema.org). We never log into your account, bypass access controls, or copy images without a rights check. You confirm you're authorised to import the URL.
         </p>
       </Panel>
 
       <div className="mt-6">
         <Panel title="Connected sources">
-          <div className="divide-y divide-[#1D1B16]">
+          <div className="divide-y divide-[#1A3550]">
             {sources.map((s) => (
               <div key={s.id} className="flex flex-wrap items-center justify-between gap-3 py-3.5">
                 <div>
                   <div className="text-[14px] font-medium">{s.name}</div>
-                  <div className="text-[11.5px] text-[#8A8074]">
+                  <div className="text-[11.5px] text-[#8AA0B4]">
                     {s.adapter} · {s.authorised ? "authorised" : "not authorised"} · {s.automated ? s.schedule?.toLowerCase() : "manual"}
                     {s.lastSyncAt && ` · last sync ${timeAgo(s.lastSyncAt)}`}
                   </div>
@@ -49,10 +49,10 @@ export default async function ImportsPage() {
                 {s.authorised && s.adapter !== "MANUAL_URL" ? (
                   <form action={runImportAction}>
                     <input type="hidden" name="sourceId" value={s.id} />
-                    <button className="border border-[#33302A] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#C9A227] hover:text-[#C9A227]">Sync now</button>
+                    <button className="border border-[#274563] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#C6A15C] hover:text-[#C6A15C]">Sync now</button>
                   </form>
                 ) : (
-                  <span className="text-[10px] font-semibold uppercase tracking-wide text-[#8A8074]">{s.adapter === "MANUAL_URL" ? "URL only" : "Locked"}</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-[#8AA0B4]">{s.adapter === "MANUAL_URL" ? "URL only" : "Locked"}</span>
                 )}
               </div>
             ))}
@@ -61,11 +61,11 @@ export default async function ImportsPage() {
       </div>
 
       <div className="mt-6">
-        <h2 className="mb-4 font-serif text-[24px]">Review queue <span className="text-[15px] text-[#8A8074]">· {records.length}</span></h2>
+        <h2 className="mb-4 font-serif text-[24px]">Review queue <span className="text-[15px] text-[#8AA0B4]">· {records.length}</span></h2>
         {records.length === 0 ? (
-          <div className="border border-[#1D1B16] bg-[#0E0D0B] p-10 text-center">
+          <div className="border border-[#1A3550] bg-[#0D2540] p-10 text-center">
             <div className="font-serif text-[22px]">No imported listings to review</div>
-            <p className="mt-2 text-[13px] text-[#8A8074]">Import from a URL or sync a source to populate this queue.</p>
+            <p className="mt-2 text-[13px] text-[#8AA0B4]">Import from a URL or sync a source to populate this queue.</p>
           </div>
         ) : (
           <div className="grid gap-5">

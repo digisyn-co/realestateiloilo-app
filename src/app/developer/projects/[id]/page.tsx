@@ -25,18 +25,18 @@ export default async function DeveloperProjectDetail({ params }: { params: { id:
   return (
     <div>
       <div className="mb-2 flex flex-wrap items-center gap-3">
-        <Link href="/developer/projects" className="text-[12px] text-[#8A8074] hover:text-[#C9A227]">← Projects</Link>
-        <span className="rounded-full bg-[#17150F] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wide text-[#C9A227]">{PROJECT_STATUS_LABELS[project.status as ProjectStatus]}</span>
+        <Link href="/developer/projects" className="text-[12px] text-[#8AA0B4] hover:text-[#C6A15C]">← Projects</Link>
+        <span className="rounded-full bg-[#10283F] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wide text-[#C6A15C]">{PROJECT_STATUS_LABELS[project.status as ProjectStatus]}</span>
       </div>
       <PageTitle title={project.name} subtitle={`${PROJECT_TYPE_LABELS[project.projectType as ProjectType]} · ${project.barangay ? project.barangay + ", " : ""}${project.city}`} />
 
       <div className="mb-6 flex flex-wrap gap-2">
-        <Link href={`/developer/projects/${project.id}/units`} className="border border-[#C9A227] bg-[#C9A227] px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#0B0A08]">Manage units</Link>
-        <Link href={`/project/${project.slug}`} className="border border-[#33302A] px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#C9A227] hover:text-[#C9A227]">View public page ↗</Link>
-        <Link href="/developer/agents" className="border border-[#33302A] px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#C9A227] hover:text-[#C9A227]">Agents</Link>
+        <Link href={`/developer/projects/${project.id}/units`} className="border border-[#C6A15C] bg-[#C6A15C] px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#0A1C33]">Manage units</Link>
+        <Link href={`/project/${project.slug}`} className="border border-[#274563] px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#C6A15C] hover:text-[#C6A15C]">View public page ↗</Link>
+        <Link href="/developer/agents" className="border border-[#274563] px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#C6A15C] hover:text-[#C6A15C]">Agents</Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-px bg-[#1D1B16] md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-px bg-[#1A3550] md:grid-cols-4">
         <Kpi value={counts.total} label="Total units" tone="gold" />
         <Kpi value={counts.available} label="Available" tone="green" />
         <Kpi value={counts.reserved} label="Reserved" tone="orange" />
@@ -52,18 +52,18 @@ export default async function DeveloperProjectDetail({ params }: { params: { id:
           <ProjectSettingsForm project={project} />
         </Panel>
 
-        <Panel title="Buildings" action={<span className="text-[12px] text-[#8A8074]">{project.buildings.length}</span>}>
+        <Panel title="Buildings" action={<span className="text-[12px] text-[#8AA0B4]">{project.buildings.length}</span>}>
           {project.buildings.length > 0 ? (
-            <div className="divide-y divide-[#1D1B16]">
+            <div className="divide-y divide-[#1A3550]">
               {project.buildings.map((b) => (
                 <div key={b.id} className="flex items-center justify-between py-2.5 text-[13.5px]">
                   <span>{b.name}{b.floors ? ` · ${b.floors} floors` : ""}</span>
-                  <span className="text-[#8A8074]">{b._count.units} units</span>
+                  <span className="text-[#8AA0B4]">{b._count.units} units</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-[13px] text-[#8A8074]">No buildings yet. Buildings are created automatically when you add units with a building name (single-tower projects can skip this).</p>
+            <p className="text-[13px] text-[#8AA0B4]">No buildings yet. Buildings are created automatically when you add units with a building name (single-tower projects can skip this).</p>
           )}
         </Panel>
       </div>

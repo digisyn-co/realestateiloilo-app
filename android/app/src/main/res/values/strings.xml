@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Real Estate Iloilo</string>
-    <string name="title_activity_main">Real Estate Iloilo</string>
+    <string name="app_name">The Iloilo Real Estate</string>
+    <string name="title_activity_main">The Iloilo Real Estate</string>
     <string name="package_name">ph.realestateiloilo.app</string>
     <string name="custom_url_scheme">ph.realestateiloilo.app</string>
 </resources>

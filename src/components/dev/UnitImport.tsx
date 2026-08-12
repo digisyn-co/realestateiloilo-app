@@ -38,8 +38,8 @@ export function UnitImport({ projectId }: { projectId: string }) {
 
   if (state.ok) {
     return (
-      <div className="border border-[#4C6046] bg-[#0E120E] p-5 text-[13.5px] text-[#7E9877]">
-        {state.message} <a href="" className="text-[#C9A227]">Refresh to see the inventory.</a>
+      <div className="border border-[#2C5A54] bg-[#0C2A26] p-5 text-[13.5px] text-[#5FA39C]">
+        {state.message} <a href="" className="text-[#C6A15C]">Refresh to see the inventory.</a>
       </div>
     );
   }
@@ -47,11 +47,11 @@ export function UnitImport({ projectId }: { projectId: string }) {
   return (
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center gap-3">
-        <label className="cursor-pointer border border-[#33302A] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#C9A227] hover:text-[#C9A227]">
+        <label className="cursor-pointer border border-[#274563] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] hover:border-[#C6A15C] hover:text-[#C6A15C]">
           Upload CSV / JSON
           <input type="file" accept=".csv,.json,.txt" onChange={onFile} className="hidden" />
         </label>
-        <button type="button" onClick={() => runPreview(SAMPLE)} className="text-[12px] text-[#8A8074] hover:text-[#C9A227]">Paste sample data</button>
+        <button type="button" onClick={() => runPreview(SAMPLE)} className="text-[12px] text-[#8AA0B4] hover:text-[#C6A15C]">Paste sample data</button>
       </div>
       <textarea
         value={text}
@@ -62,16 +62,16 @@ export function UnitImport({ projectId }: { projectId: string }) {
       />
 
       {preview && (
-        <div className="border border-[#1D1B16] bg-[#0B0A08]">
-          <div className="flex flex-wrap gap-5 border-b border-[#1D1B16] px-5 py-3 text-[13px]">
+        <div className="border border-[#1A3550] bg-[#0A1C33]">
+          <div className="flex flex-wrap gap-5 border-b border-[#1A3550] px-5 py-3 text-[13px]">
             <span>{preview.total} rows detected</span>
-            <span className="text-[#7E9877]">✓ {preview.valid} valid</span>
+            <span className="text-[#5FA39C]">✓ {preview.valid} valid</span>
             {preview.invalid > 0 && <span className="text-[#E2712B]">⚠ {preview.invalid} errors</span>}
           </div>
           <div className="max-h-64 overflow-auto">
             <table className="w-full min-w-[640px] text-left text-[12.5px]">
               <thead>
-                <tr className="border-b border-[#1D1B16] text-[8.5px] uppercase tracking-[0.16em] text-[#8A8074]">
+                <tr className="border-b border-[#1A3550] text-[8.5px] uppercase tracking-[0.16em] text-[#8AA0B4]">
                   <th className="px-4 py-2">Row</th>
                   <th className="px-4 py-2">Unit</th>
                   <th className="px-4 py-2">Type</th>
@@ -81,14 +81,14 @@ export function UnitImport({ projectId }: { projectId: string }) {
               </thead>
               <tbody>
                 {preview.rows.slice(0, 100).map((r) => (
-                  <tr key={r.index} className="border-b border-[#1D1B16]">
-                    <td className="px-4 py-2 text-[#8A8074]">{r.index}</td>
+                  <tr key={r.index} className="border-b border-[#1A3550]">
+                    <td className="px-4 py-2 text-[#8AA0B4]">{r.index}</td>
                     <td className="px-4 py-2">{r.normalized?.unitNumber || r.raw["Unit Number"] || "—"}</td>
-                    <td className="px-4 py-2 text-[#8A8074]">{r.normalized?.unitType || "—"}</td>
+                    <td className="px-4 py-2 text-[#8AA0B4]">{r.normalized?.unitType || "—"}</td>
                     <td className="px-4 py-2 tabular-nums">{r.normalized ? "₱" + r.normalized.price.toLocaleString() : "—"}</td>
                     <td className="px-4 py-2">
                       {r.errors.length === 0 ? (
-                        <span className="text-[#7E9877]">{r.normalized?.status}</span>
+                        <span className="text-[#5FA39C]">{r.normalized?.status}</span>
                       ) : (
                         <span className="text-[#E2712B]">{r.errors.join(", ")}</span>
                       )}
@@ -99,10 +99,10 @@ export function UnitImport({ projectId }: { projectId: string }) {
             </table>
           </div>
           {state.error && <p className="px-5 py-2 text-[13px] text-[#E2712B]">{state.error}</p>}
-          <form action={action} className="flex items-center justify-end gap-3 border-t border-[#1D1B16] px-5 py-3">
+          <form action={action} className="flex items-center justify-end gap-3 border-t border-[#1A3550] px-5 py-3">
             <input type="hidden" name="projectId" value={projectId} />
             <input type="hidden" name="data" value={text} />
-            <button type="button" onClick={() => { setText(""); setPreview(null); }} className="text-[12px] text-[#8A8074] hover:text-[#F4F0E6]">Cancel</button>
+            <button type="button" onClick={() => { setText(""); setPreview(null); }} className="text-[12px] text-[#8AA0B4] hover:text-[#EDE7D6]">Cancel</button>
             <SubmitBtn count={preview.valid} />
           </form>
         </div>
@@ -114,7 +114,7 @@ export function UnitImport({ projectId }: { projectId: string }) {
 function SubmitBtn({ count }: { count: number }) {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending || count === 0} className="border border-[#C9A227] bg-[#C9A227] px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#0B0A08] disabled:opacity-50">
+    <button type="submit" disabled={pending || count === 0} className="border border-[#C6A15C] bg-[#C6A15C] px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#0A1C33] disabled:opacity-50">
       {pending ? "Importing…" : `Import ${count} valid rows`}
     </button>
   );

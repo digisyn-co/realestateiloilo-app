@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 /**
- * Real Estate Iloilo — native mobile app (Capacitor 6).
+ * The Iloilo Real Estate — native mobile app (Capacitor 6).
  *
  * Strategy: the app is a server-rendered Next.js app, so the native shell loads
  * the hosted app over HTTPS (`server.url`) and layers native capabilities on top
@@ -19,7 +19,7 @@ const PROD_URL = "https://realestateiloilo-app.vercel.app";
 
 const config: CapacitorConfig = {
   appId: "ph.realestateiloilo.app",
-  appName: "Real Estate Iloilo",
+  appName: "The Iloilo Real Estate",
   webDir: "mobile/www", // offline/loading fallback bundled into the app
   server: {
     url: PROD_URL,
@@ -28,27 +28,27 @@ const config: CapacitorConfig = {
     androidScheme: "https",
     iosScheme: "https",
   },
-  backgroundColor: "#FBF8F3",
+  backgroundColor: "#FAF6EC",
   ios: {
     contentInset: "always",
-    backgroundColor: "#FBF8F3",
+    backgroundColor: "#FAF6EC",
     limitsNavigationsToAppBoundDomains: false,
   },
   android: {
-    backgroundColor: "#FBF8F3",
+    backgroundColor: "#FAF6EC",
   },
   plugins: {
     SplashScreen: {
       launchShowDuration: 1200,
       launchAutoHide: false, // NativeBridge hides it once the web app is ready
-      backgroundColor: "#FBF8F3",
+      backgroundColor: "#FAF6EC",
       androidScaleType: "CENTER_CROP",
       showSpinner: false,
       splashImmersive: false,
     },
     StatusBar: {
       style: "LIGHT", // dark text/icons on the light app background
-      backgroundColor: "#FBF8F3",
+      backgroundColor: "#FAF6EC",
     },
     Keyboard: {
       resize: "native",

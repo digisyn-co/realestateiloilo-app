@@ -1,45 +1,60 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Design tokens transcribed from the Claude Design prototype
- * (design-reference/DESIGN-SYSTEM.md). The prototype is the visual source of truth.
+ * The Iloilo Real Estate — brand design tokens.
+ * Identity: deep navy + antique gold + teal on warm cream. "Connecting people.
+ * Building futures." (from the brand kit). Buyer app is light (cream/navy/gold);
+ * dashboards + marketing use the navy/gold dark theme (hex in components/dash).
  */
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        page: "#F3EDE4",
-        app: "#FBF8F3",
+        // light surfaces (buyer app)
+        page: "#EFE7D5",
+        app: "#FAF6EC",
         surface: "#FFFFFF",
-        "surface-warm": "#FFF9F2",
-        sand: "#F6F1E9",
+        "surface-warm": "#F7F0E0",
+        sand: "#EFE6D2",
+        // ink = brand navy
         ink: {
-          DEFAULT: "#1A1714",
-          2: "#3D3630",
-          3: "#5A524A",
+          DEFAULT: "#0B1E36",
+          2: "#24384F",
+          3: "#45586E",
         },
         muted: {
-          DEFAULT: "#6B6259",
-          2: "#7A7268",
+          DEFAULT: "#5C6B7C",
+          2: "#8592A0",
         },
+        // accent = antique gold (readable on cream + as button bg)
         accent: {
-          DEFAULT: "#B4551A",
-          soft: "#FDF3EA",
+          DEFAULT: "#9A7B39",
+          soft: "#F3EAD3",
+        },
+        // bright metallic gold for decorative marks/borders
+        gold: {
+          DEFAULT: "#C6A15C",
+          deep: "#9A7B39",
+        },
+        // brand teal (secondary / verified)
+        teal: {
+          DEFAULT: "#123F3C",
+          soft: "#E3EFEB",
         },
         success: {
-          DEFAULT: "#2F6B4F",
-          soft: "#EDF5F0",
+          DEFAULT: "#2C6E63",
+          soft: "#E3EFEB",
         },
         line: {
-          DEFAULT: "#E4DCD1",
-          2: "#F1EBE2",
-          3: "#E0D8CC",
+          DEFAULT: "#E4DAC5",
+          2: "#F0E9DA",
+          3: "#DFD4BE",
         },
         map: {
-          bg: "#EDF0E9",
-          road: "#E2E7DC",
-          water: "#DCE6E8",
+          bg: "#E7EEE9",
+          road: "#DBE6DE",
+          water: "#CFE0E2",
         },
       },
       fontFamily: {
@@ -51,12 +66,12 @@ const config: Config = {
         xl2: "20px",
       },
       boxShadow: {
-        card: "0 1px 3px rgba(26,23,20,.05)",
-        "card-hover": "0 2px 6px rgba(26,23,20,.06), 0 18px 36px -18px rgba(26,23,20,.24)",
-        elev: "0 1px 3px rgba(26,23,20,.05), 0 8px 24px -16px rgba(26,23,20,.16)",
-        cta: "0 1px 3px rgba(26,23,20,.06), 0 10px 26px -18px rgba(26,23,20,.2)",
-        pop: "0 8px 30px -8px rgba(26,23,20,.3)",
-        float: "0 2px 8px rgba(26,23,20,.14)",
+        card: "0 1px 3px rgba(11,30,54,.06)",
+        "card-hover": "0 2px 6px rgba(11,30,54,.07), 0 18px 36px -18px rgba(11,30,54,.28)",
+        elev: "0 1px 3px rgba(11,30,54,.06), 0 8px 24px -16px rgba(11,30,54,.18)",
+        cta: "0 1px 3px rgba(11,30,54,.07), 0 10px 26px -18px rgba(11,30,54,.24)",
+        pop: "0 8px 30px -8px rgba(11,30,54,.32)",
+        float: "0 2px 8px rgba(11,30,54,.16)",
       },
       keyframes: {
         appIn: { from: { opacity: "0", transform: "translateY(10px)" }, to: { opacity: "1", transform: "none" } },
@@ -65,7 +80,7 @@ const config: Config = {
         popA: { "0%": { transform: "scale(1)" }, "40%": { transform: "scale(1.45)" }, "70%": { transform: "scale(.9)" }, "100%": { transform: "scale(1)" } },
         shimA: { "0%": { opacity: ".5" }, "50%": { opacity: "1" }, "100%": { opacity: ".5" } },
         toastA: { from: { opacity: "0", transform: "translate(-50%,16px)" }, to: { opacity: "1", transform: "translate(-50%,0)" } },
-        ringA: { "0%": { boxShadow: "0 0 0 0 rgba(180,85,26,.4)" }, "70%": { boxShadow: "0 0 0 12px rgba(180,85,26,0)" }, "100%": { boxShadow: "0 0 0 0 rgba(180,85,26,0)" } },
+        ringA: { "0%": { boxShadow: "0 0 0 0 rgba(154,123,57,.4)" }, "70%": { boxShadow: "0 0 0 12px rgba(154,123,57,0)" }, "100%": { boxShadow: "0 0 0 0 rgba(154,123,57,0)" } },
       },
       animation: {
         appIn: "appIn .5s ease",

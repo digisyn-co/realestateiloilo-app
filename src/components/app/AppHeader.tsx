@@ -13,7 +13,7 @@ export async function AppHeader() {
     <header className="sticky top-0 z-40 border-b border-line-2 bg-app/90 backdrop-blur">
       <div className="mx-auto flex h-[62px] max-w-[1200px] items-center gap-4 px-4">
         <Link href="/browse" className="font-serif text-[24px] leading-none text-ink">
-          Real Estate <span className="italic text-accent">Iloilo</span>
+          The <span className="italic text-accent">Iloilo</span> Real Estate
         </Link>
 
         <nav className="ml-6 hidden items-center gap-1 md:flex">

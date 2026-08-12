@@ -6,7 +6,7 @@ import { requestDeveloperVerificationAction } from "@/lib/developer-actions";
 
 export const dynamic = "force-dynamic";
 
-const VERIFY_TONE: Record<string, string> = { VERIFIED: "#7E9877", PENDING: "#C9A227", UNVERIFIED: "#8A8074", SUSPENDED: "#C05B4A" };
+const VERIFY_TONE: Record<string, string> = { VERIFIED: "#5FA39C", PENDING: "#C6A15C", UNVERIFIED: "#8AA0B4", SUSPENDED: "#C05B4A" };
 
 export default async function DeveloperSettings() {
   const user = await getSessionUser();
@@ -27,9 +27,9 @@ export default async function DeveloperSettings() {
           <Row label="Contact email" value={developer.contactEmail || user.email} />
           <Row label="Years operating" value={developer.yearsOperating ? String(developer.yearsOperating) : "—"} />
         </div>
-        {developer.description && <p className="mt-4 border-t border-[#1D1B16] pt-4 text-[13.5px] leading-relaxed text-[#F4F0E6]/70">{developer.description}</p>}
+        {developer.description && <p className="mt-4 border-t border-[#1A3550] pt-4 text-[13.5px] leading-relaxed text-[#EDE7D6]/70">{developer.description}</p>}
         {developer.verified && (
-          <Link href={`/developers/${developer.id}`} className="mt-4 inline-block text-[12px] text-[#C9A227]">View public developer profile ↗</Link>
+          <Link href={`/developers/${developer.id}`} className="mt-4 inline-block text-[12px] text-[#C6A15C]">View public developer profile ↗</Link>
         )}
       </Panel>
 
@@ -38,16 +38,16 @@ export default async function DeveloperSettings() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <div className="text-[14px]">Status: <span className="font-semibold" style={{ color: VERIFY_TONE[developer.verificationStatus] }}>{developer.verificationStatus}</span></div>
-              <p className="mt-1 max-w-md text-[12.5px] text-[#8A8074]">
+              <p className="mt-1 max-w-md text-[12.5px] text-[#8AA0B4]">
                 Verified developers get a badge and rank higher in search. Company registration, authorized representative and contact are checked by an admin. Documents are never exposed publicly (brief §25).
               </p>
             </div>
             {developer.verificationStatus === "UNVERIFIED" && (
               <form action={requestDeveloperVerificationAction}>
-                <button className="border border-[#C9A227] bg-[#C9A227] px-5 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#0B0A08]">Request verification</button>
+                <button className="border border-[#C6A15C] bg-[#C6A15C] px-5 py-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#0A1C33]">Request verification</button>
               </form>
             )}
-            {developer.verificationStatus === "PENDING" && <span className="text-[12px] text-[#C9A227]">Awaiting admin review…</span>}
+            {developer.verificationStatus === "PENDING" && <span className="text-[12px] text-[#C6A15C]">Awaiting admin review…</span>}
           </div>
         </Panel>
       </div>
@@ -58,8 +58,8 @@ export default async function DeveloperSettings() {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8A8074]">{label}</div>
-      <div className="border border-[#26231E] bg-[#0B0A08] px-3.5 py-3 text-[14px]">{value}</div>
+      <div className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#8AA0B4]">{label}</div>
+      <div className="border border-[#1F3E5A] bg-[#0A1C33] px-3.5 py-3 text-[14px]">{value}</div>
     </div>
   );
 }

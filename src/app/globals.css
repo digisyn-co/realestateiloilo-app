@@ -28,18 +28,18 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d8cfc3;
+  background: #dccfb4;
   border-radius: 999px;
 }
 
 @layer components {
-  /* Terracotta primary button */
+  /* Antique-gold primary button (brand) */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-accent px-5 font-sans font-semibold text-white transition-colors;
     min-height: 52px;
   }
   .btn-primary:hover {
-    background: #9d4715;
+    background: #83682f;
   }
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-surface px-5 font-sans font-semibold text-ink shadow-card transition-colors;
@@ -76,12 +76,12 @@ body {
     @apply font-serif tabular-nums;
     letter-spacing: -0.015em;
   }
-  /* dark dashboard input */
+  /* dark dashboard input (navy theme) */
   .dfield {
-    @apply w-full border border-[#33302A] bg-[#0B0A08] px-3.5 py-3 font-sans text-[14.5px] text-[#F4F0E6] outline-none;
+    @apply w-full border border-[#274563] bg-[#0A1C33] px-3.5 py-3 font-sans text-[14.5px] text-[#EDE7D6] outline-none;
   }
   .dfield:focus {
-    border-color: #c9a227;
+    border-color: #c6a15c;
   }
 }
 

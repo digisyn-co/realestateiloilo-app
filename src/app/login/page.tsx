@@ -22,7 +22,7 @@ function LoginInner() {
     <div className="grid min-h-screen place-items-center bg-app px-5 py-10">
       <div className="w-full max-w-[400px]">
         <Link href="/" className="mb-1 block text-center font-serif text-[30px] text-ink">
-          Real Estate <span className="italic text-accent">Iloilo</span>
+          The <span className="italic text-accent">Iloilo</span> Real Estate
         </Link>
         <p className="mb-8 text-center font-sans text-[14px] text-muted">Welcome back — sign in to save homes and message brokers.</p>
 

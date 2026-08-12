@@ -18,16 +18,16 @@ export default async function ViewingsPage() {
       <PageTitle title="Viewing requests" subtitle={`${viewings.length} total`} />
       <Panel>
         {viewings.length === 0 ? (
-          <p className="py-6 text-center text-[13.5px] text-[#8A8074]">No viewing requests yet.</p>
+          <p className="py-6 text-center text-[13.5px] text-[#8AA0B4]">No viewing requests yet.</p>
         ) : (
-          <div className="divide-y divide-[#1D1B16]">
+          <div className="divide-y divide-[#1A3550]">
             {viewings.map((v) => (
               <div key={v.id} className="flex flex-wrap items-center justify-between gap-3 py-3.5">
                 <div>
                   <div className="text-[14px] font-medium">{v.listing.property.title}</div>
-                  <div className="text-[12px] text-[#8A8074]">{v.requester?.name || "Guest"} · {v.slotLabel || ""} {new Date(v.scheduledAt).toLocaleDateString("en-PH", { month: "short", day: "numeric" })}</div>
+                  <div className="text-[12px] text-[#8AA0B4]">{v.requester?.name || "Guest"} · {v.slotLabel || ""} {new Date(v.scheduledAt).toLocaleDateString("en-PH", { month: "short", day: "numeric" })}</div>
                 </div>
-                <span className="rounded-full border border-[#33302A] px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#C9A227]">{v.status}</span>
+                <span className="rounded-full border border-[#274563] px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#C6A15C]">{v.status}</span>
               </div>
             ))}
           </div>
