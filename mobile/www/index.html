@@ -36,14 +36,24 @@
       </div>
     </div>
     <script>
-      // If Capacitor loads this fallback (no network to the live app), show offline UI.
-      setTimeout(function () {
-        if (!navigator.onLine) {
-          document.getElementById("ring").style.display = "none";
-          document.getElementById("msg").style.display = "none";
-          document.getElementById("offline").classList.add("show");
-        }
-      }, 2500);
+      // This page is the native app's splash/offline placeholder. Inside the
+      // Capacitor shell (online) the WebView loads the live app directly and this
+      // is never shown. Behaviour when it IS shown:
+      //   • offline            → show the "reconnect" UI
+      //   • opened in a browser → redirect to the live app (so it doesn't just spin)
+      (function () {
+        var LIVE = "https://realestateiloilo-app.vercel.app/browse";
+        var isNative = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+        setTimeout(function () {
+          if (!navigator.onLine) {
+            document.getElementById("ring").style.display = "none";
+            document.getElementById("msg").style.display = "none";
+            document.getElementById("offline").classList.add("show");
+            return;
+          }
+          if (!isNative) location.replace(LIVE); // standalone browser → open the real app
+        }, 1500);
+      })();
     </script>
   </body>
 </html>
