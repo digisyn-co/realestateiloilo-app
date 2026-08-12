@@ -67,7 +67,14 @@ model Agent {
   contactPhone  String?
   contactEmail  String?
   responseTime  String? // e.g. "about 2 hours"
+  title         String? // e.g. "Senior Agent" (within a brokerage)
+  // Brokerage hierarchy: a member agent reports to a head broker (another Agent).
+  // A BROKER-role Agent with no headBroker is the head/lead of the brokerage.
+  headBrokerId  String?
   createdAt     DateTime @default(now())
+
+  headBroker     Agent?   @relation("BrokerTeam", fields: [headBrokerId], references: [id])
+  members        Agent[]  @relation("BrokerTeam")
 
   listings       Listing[]        @relation("AgentListings")
   reviews        AgentReview[]
@@ -80,6 +87,8 @@ model Agent {
   projectLeads   ProjectLead[]
   reservations   UnitReservation[]
   sales          UnitSale[]
+
+  @@index([headBrokerId])
 }
 
 model AgentReview {
