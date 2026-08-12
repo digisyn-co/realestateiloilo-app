@@ -8,6 +8,7 @@ import { getSavedIds, searchListings } from "@/lib/queries";
 import { getSessionUser } from "@/lib/auth";
 import { searchProjects } from "@/lib/developer/queries";
 import { ProjectCard } from "@/components/dev/ProjectCard";
+import { WelcomeBand } from "@/components/app/WelcomeBand";
 
 export const dynamic = "force-dynamic";
 
@@ -28,9 +29,12 @@ export default async function BrowsePage({ searchParams }: { searchParams: Recor
         ? "For rent in Iloilo"
         : "Homes across Iloilo";
 
+  const isDefaultView = !filters.q && !filters.city && !filters.listingType && !filters.verifiedOnly && (filters.page || 1) === 1;
+
   return (
     <div>
       <SearchControls />
+      {isDefaultView && <WelcomeBand />}
       <div className="flex items-baseline justify-between gap-3 pb-4 pt-5">
         <h1 className="font-serif text-[30px] leading-tight text-ink">{heading}</h1>
         <span className="flex-none font-sans text-[13px] font-medium text-muted">
