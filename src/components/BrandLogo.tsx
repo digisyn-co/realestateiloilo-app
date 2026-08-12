@@ -21,8 +21,12 @@ export function BrandLogo({
   textClassName?: string;
 }) {
   const [failed, setFailed] = useState(false);
-  const src =
+  // bump BRAND_V whenever a logo file's contents change (same filename) so
+  // browsers/CDN don't serve a stale cached image.
+  const BRAND_V = "3";
+  const base =
     variant === "mark" ? "/brand/mark.png" : variant === "horizontal" ? "/brand/logo-horizontal.png" : "/brand/logo.png";
+  const src = `${base}?v=${BRAND_V}`;
 
   if (failed) {
     return (
