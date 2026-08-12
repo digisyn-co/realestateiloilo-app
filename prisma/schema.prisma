@@ -472,6 +472,19 @@ model AuditLog {
   @@index([createdAt])
 }
 
+// Native push registration token (Capacitor). Delivery needs APNs/FCM creds + a
+// server sender; this stores the per-device tokens the sender would target.
+model PushDevice {
+  id        String   @id @default(cuid())
+  userId    String? // scalar (no FK) so the token store stays decoupled
+  token     String   @unique
+  platform  String // ios | android | web
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
 // ===========================================================================
 // Developer ecosystem (brief §5–28) — Developer → Project → Building → Unit,
 // agent distribution, leads, reservations (with server-side inventory locking).

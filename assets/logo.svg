@@ -1,0 +1,21 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="30%" r="90%">
+      <stop offset="0%" stop-color="#C4611F"/>
+      <stop offset="100%" stop-color="#A84E17"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- house mark in warm cream -->
+  <g fill="#FBF8F3">
+    <path d="M512 262 L788 470 L724 470 L724 476 L724 730 L300 730 L300 476 L300 470 L236 470 Z"/>
+  </g>
+  <!-- door + window cut from the house (terracotta) -->
+  <g fill="#A84E17">
+    <rect x="466" y="566" width="92" height="164" rx="12"/>
+    <rect x="356" y="520" width="86" height="86" rx="10"/>
+    <rect x="582" y="520" width="86" height="86" rx="10"/>
+  </g>
+  <!-- serif wordmark initial -->
+  <text x="512" y="880" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="132" font-style="italic" fill="#FBF8F3">Iloilo</text>
+</svg>

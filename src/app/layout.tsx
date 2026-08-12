@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Instrument_Serif } from "next/font/google";
 import "./globals.css";
+import { NativeBridge } from "@/components/native/NativeBridge";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -27,12 +28,17 @@ export const viewport: Viewport = {
   themeColor: "#FBF8F3",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 1, // prevent zoom jank inside the native WebView
+  viewportFit: "cover", // extend under notches; components use env(safe-area-inset-*)
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${manrope.variable} ${instrumentSerif.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <NativeBridge />
+        {children}
+      </body>
     </html>
   );
 }

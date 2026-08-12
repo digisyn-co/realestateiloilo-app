@@ -39,3 +39,18 @@ yarn-error.log*
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+# capacitor / native build artifacts (the ios/ & android/ projects ARE committed;
+# only their generated build outputs are ignored)
+/ios/App/Pods
+/ios/App/App/public
+/ios/App/build
+/ios/DerivedData
+*.xcuserstate
+/android/.gradle
+/android/build
+/android/app/build
+/android/captures
+/android/local.properties
+/android/app/src/main/assets/public
+.DS_Store
