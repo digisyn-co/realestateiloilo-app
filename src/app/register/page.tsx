@@ -8,7 +8,9 @@ import { registerAction, type AuthState } from "@/lib/auth-actions";
 export default function RegisterPage() {
   const [state, action] = useFormState<AuthState, FormData>(registerAction, {});
   const [role, setRole] = useState("BUYER");
-  const isAgent = ["AGENT", "BROKER", "DEVELOPER"].includes(role);
+  const isBroker = role === "BROKER";
+  const isDeveloper = role === "DEVELOPER";
+  const showCompany = isBroker || isDeveloper;
 
   return (
     <div className="grid min-h-screen place-items-center bg-app px-5 py-10">
@@ -19,11 +21,12 @@ export default function RegisterPage() {
         <p className="mb-8 text-center font-sans text-[14px] text-muted">Create your account.</p>
 
         <form action={action} className="space-y-3 rounded-xl2 bg-surface p-6 shadow-card">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {[
               { v: "BUYER", label: "Buyer / Renter" },
               { v: "OWNER", label: "Owner" },
               { v: "BROKER", label: "Broker" },
+              { v: "DEVELOPER", label: "Developer" },
             ].map((r) => (
               <button
                 type="button"
@@ -40,11 +43,15 @@ export default function RegisterPage() {
           <input name="email" type="email" placeholder="Email" className="field" required />
           <input name="phone" placeholder="Mobile number (optional)" className="field" />
           <input name="password" type="password" placeholder="Password (8+ characters)" className="field" required />
-          {isAgent && (
+          {showCompany && (
             <>
-              <input name="company" placeholder="Brokerage / company" className="field" />
-              <input name="licenseNumber" placeholder="PRC licence number" className="field" />
-              <p className="font-sans text-[12px] text-muted">Broker accounts are reviewed before verification. You can list right away; the verified badge follows approval.</p>
+              <input name="company" placeholder={isDeveloper ? "Development company" : "Brokerage / company"} className="field" />
+              {isBroker && <input name="licenseNumber" placeholder="PRC licence number" className="field" />}
+              <p className="font-sans text-[12px] text-muted">
+                {isDeveloper
+                  ? "Developer accounts get a portal to manage projects, units and agent distribution. Verification (with a badge) follows admin approval."
+                  : "Broker accounts are reviewed before verification. You can list right away; the verified badge follows approval."}
+              </p>
             </>
           )}
           {state.error && <p className="font-sans text-[13px] text-accent">{state.error}</p>}

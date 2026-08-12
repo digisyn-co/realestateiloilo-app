@@ -49,6 +49,10 @@ model User {
   auditLogs        AuditLog[]
   importJobs       ImportJob[]      @relation("ImportInitiator")
 
+  developer        Developer?
+  projectLeads     ProjectLead[]    @relation("LeadBuyer")
+  reservations     UnitReservation[] @relation("ReservationBuyer")
+
   @@index([role])
 }
 
@@ -71,6 +75,11 @@ model Agent {
   threads        Thread[]         @relation("ThreadAgent")
   leads          Lead[]
   viewingSlots   ViewingRequest[] @relation("ViewingAgent")
+
+  projectAccess  AgentProjectAccess[]
+  projectLeads   ProjectLead[]
+  reservations   UnitReservation[]
+  sales          UnitSale[]
 }
 
 model AgentReview {
@@ -121,6 +130,7 @@ model Amenity {
   id         String            @id @default(cuid())
   name       String            @unique
   properties PropertyAmenity[]
+  projects   ProjectAmenity[]
 }
 
 model PropertyAmenity {
@@ -459,5 +469,274 @@ model AuditLog {
   createdAt DateTime @default(now())
 
   @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+// ===========================================================================
+// Developer ecosystem (brief §5–28) — Developer → Project → Building → Unit,
+// agent distribution, leads, reservations (with server-side inventory locking).
+// ===========================================================================
+
+model Developer {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company            String
+  description        String?
+  website            String?
+  logoUrl            String?
+  registrationNo     String? // SEC / DTI registration (verification)
+  repName            String? // authorized representative
+  contactEmail       String?
+  contactPhone       String?
+  yearsOperating     Int?
+  verified           Boolean  @default(false)
+  verificationStatus String   @default("UNVERIFIED") // UNVERIFIED|PENDING|VERIFIED|SUSPENDED
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  projects  Project[]
+  documents DeveloperDocument[]
+
+  @@index([verificationStatus])
+}
+
+// Sensitive verification documents — never exposed publicly.
+model DeveloperDocument {
+  id          String   @id @default(cuid())
+  developerId String
+  developer   Developer @relation(fields: [developerId], references: [id], onDelete: Cascade)
+  type        String // SEC_REGISTRATION|DTI|LICENSE_TO_SELL|REP_ID|OTHER
+  title       String
+  url         String
+  createdAt   DateTime @default(now())
+
+  @@index([developerId])
+}
+
+model Project {
+  id               String   @id @default(cuid())
+  developerId      String
+  developer        Developer @relation(fields: [developerId], references: [id], onDelete: Cascade)
+  name             String
+  slug             String   @unique
+  description      String?
+  projectType      String // CONDO|SUBDIVISION|TOWNHOUSE|COMMERCIAL|MIXED_USE|OFFICE|OTHER
+  address          String?
+  barangay         String?
+  city             String
+  province         String   @default("Iloilo")
+  latitude         Float?
+  longitude        Float?
+  completionDate   DateTime?
+  turnoverDate     DateTime?
+  website          String?
+  brochureUrl      String?
+  paymentTerms     String?
+  financingOptions String?
+  status           String   @default("SELLING") // PRE_LAUNCH|SELLING|CONSTRUCTION|NEAR_COMPLETION|COMPLETED|SOLD_OUT|ARCHIVED
+  visibility       String   @default("PUBLIC") // PUBLIC|AGENTS_ONLY|PRIVATE
+  distribution     String   @default("ALL_AGENTS") // ALL_AGENTS|SELECTED_AGENCIES|SELECTED_AGENTS|INVITE_ONLY
+  leadOwnership    String   @default("SHARED") // DEVELOPER|AGENT|SHARED (brief §18)
+  defaultCommission Float?  // default agent commission % for this project
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  buildings    Building[]
+  units        Unit[]
+  images       ProjectImage[]
+  amenities    ProjectAmenity[]
+  documents    ProjectDocument[]
+  agentAccess  AgentProjectAccess[]
+  leads        ProjectLead[]
+  reservations UnitReservation[]
+  sales        UnitSale[]
+  views        ProjectView[]
+
+  @@index([status])
+  @@index([visibility])
+  @@index([city])
+  @@index([developerId])
+}
+
+model ProjectImage {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  url       String
+  sortOrder Int     @default(0)
+
+  @@index([projectId])
+}
+
+model ProjectAmenity {
+  projectId String
+  amenityId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  amenity   Amenity @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, amenityId])
+}
+
+// Marketing materials (brief §22). visibility PUBLIC|AGENT_ONLY.
+model ProjectDocument {
+  id         String   @id @default(cuid())
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title      String
+  type       String // BROCHURE|FLOOR_PLAN|PRICE_LIST|VIDEO|PHOTO|LOGO|SALES_KIT|PRESENTATION|OTHER
+  url        String
+  visibility String   @default("PUBLIC") // PUBLIC|AGENT_ONLY
+  createdAt  DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model Building {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  floors    Int?
+  createdAt DateTime @default(now())
+
+  units Unit[]
+
+  @@index([projectId])
+}
+
+model Unit {
+  id             String   @id @default(cuid())
+  projectId      String
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  buildingId     String?
+  building       Building? @relation(fields: [buildingId], references: [id])
+  unitNumber     String
+  floor          Int?
+  unitType       String // STUDIO|1BR|2BR|3BR|LOFT|PENTHOUSE|TOWNHOUSE|LOT|COMMERCIAL|OTHER
+  bedrooms       Int?
+  bathrooms      Int?
+  floorArea      Float? // sqm
+  balconyArea    Float?
+  parking        Int?
+  price          Float
+  agentPrice     Float? // agent-only price (never exposed publicly)
+  reservationFee Float?
+  paymentTerms   String?
+  status         String   @default("AVAILABLE") // AVAILABLE|RESERVED|SOLD|ON_HOLD|UNAVAILABLE|UNDER_CONTRACT
+  visibility     String   @default("PUBLIC") // PUBLIC|AGENTS_ONLY|PRIVATE
+  orientation    String?
+  view           String?
+  floorPlanUrl   String?
+  images         String? // JSON array of urls
+  features       String? // JSON array
+  // server-side inventory locking (brief §21)
+  holdAgentId    String?
+  holdExpiresAt  DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  reservations UnitReservation[]
+  sale         UnitSale?
+  leads        ProjectLead[]
+
+  @@unique([projectId, unitNumber])
+  @@index([projectId])
+  @@index([status])
+  @@index([unitType])
+}
+
+// Developer authorises an agent to distribute a project's inventory (brief §13–15).
+model AgentProjectAccess {
+  id            String   @id @default(cuid())
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  agentId       String
+  agent         Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  status        String   @default("REQUESTED") // REQUESTED|APPROVED|REJECTED|REVOKED
+  commissionPct Float?
+  note          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([projectId, agentId])
+  @@index([status])
+}
+
+// Developer/agent lead (brief §18, §19). ownership DEVELOPER|AGENT|SHARED.
+model ProjectLead {
+  id            String   @id @default(cuid())
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  unitId        String?
+  unit          Unit?    @relation(fields: [unitId], references: [id])
+  agentId       String?
+  agent         Agent?   @relation(fields: [agentId], references: [id])
+  buyerUserId   String?
+  buyer         User?    @relation("LeadBuyer", fields: [buyerUserId], references: [id])
+  name          String
+  contact       String?
+  email         String?
+  budget        String?
+  unitTypeInterest String?
+  source        String   @default("PUBLIC") // PUBLIC|AGENT|IMPORT
+  ownership     String   @default("DEVELOPER") // DEVELOPER|AGENT|SHARED
+  status        String   @default("NEW") // NEW|CONTACTED|VIEWING|RESERVED|WON|LOST
+  createdAt     DateTime @default(now())
+
+  @@index([projectId])
+  @@index([agentId])
+  @@index([status])
+}
+
+model UnitReservation {
+  id            String   @id @default(cuid())
+  unitId        String
+  unit          Unit     @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  agentId       String?
+  agent         Agent?   @relation(fields: [agentId], references: [id])
+  buyerUserId   String?
+  buyer         User?    @relation("ReservationBuyer", fields: [buyerUserId], references: [id])
+  buyerName     String
+  buyerContact  String?
+  status        String   @default("REQUESTED") // REQUESTED|HELD|RESERVED|APPROVED|REJECTED|CANCELLED|EXPIRED|SOLD
+  holdExpiresAt DateTime?
+  note          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([unitId])
+  @@index([projectId])
+  @@index([status])
+}
+
+model UnitSale {
+  id          String   @id @default(cuid())
+  unitId      String   @unique
+  unit        Unit     @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  agentId     String?
+  agent       Agent?   @relation(fields: [agentId], references: [id])
+  buyerName   String
+  price       Float
+  commissionPct Float?
+  soldAt      DateTime @default(now())
+
+  @@index([projectId])
+  @@index([agentId])
+}
+
+model ProjectView {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  unitId    String?
+  source    String? // web|app|share
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
   @@index([createdAt])
 }

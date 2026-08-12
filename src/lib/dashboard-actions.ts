@@ -201,6 +201,8 @@ export async function setUserRoleAction(formData: FormData) {
   const verify = formData.get("verify") === "1";
   await prisma.user.update({ where: { id }, data: { verificationStatus: verify ? "VERIFIED" : "PENDING" } });
   await prisma.agent.updateMany({ where: { userId: id }, data: { verified: verify } });
+  await prisma.developer.updateMany({ where: { userId: id }, data: { verified: verify, verificationStatus: verify ? "VERIFIED" : "PENDING" } });
+  if (verify) await prisma.notification.create({ data: { userId: id, type: "DEVELOPER_VERIFIED", title: "Account verified", body: "Your account is now verified.", href: "/developer" } });
   await prisma.auditLog.create({ data: { actorId: admin.id, action: verify ? "VERIFY_USER" : "UNVERIFY_USER", entity: "User", entityId: id } });
   revalidatePath("/admin/users");
 }

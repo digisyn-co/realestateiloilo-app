@@ -20,6 +20,7 @@ export type SessionUser = {
   role: Role;
   avatarUrl?: string | null;
   agentId?: string | null;
+  developerId?: string | null;
 };
 
 export async function hashPassword(pw: string): Promise<string> {
@@ -63,7 +64,7 @@ async function readUserId(): Promise<string | null> {
 export async function getSessionUser(): Promise<SessionUser | null> {
   const id = await readUserId();
   if (!id) return null;
-  const user = await prisma.user.findUnique({ where: { id }, include: { agent: true } });
+  const user = await prisma.user.findUnique({ where: { id }, include: { agent: true, developer: true } });
   if (!user) return null;
   return {
     id: user.id,
@@ -72,13 +73,18 @@ export async function getSessionUser(): Promise<SessionUser | null> {
     role: (ROLES.includes(user.role as Role) ? user.role : "BUYER") as Role,
     avatarUrl: user.avatarUrl,
     agentId: user.agent?.id ?? null,
+    developerId: user.developer?.id ?? null,
   };
 }
 
-const AGENT_ROLES: Role[] = ["AGENT", "BROKER", "DEVELOPER"];
+// Agent-style roles (market/sell). Developers have their own portal (/developer).
+const AGENT_ROLES: Role[] = ["AGENT", "BROKER"];
 
 export function isAgentRole(role: Role): boolean {
   return AGENT_ROLES.includes(role);
+}
+export function isDeveloperRole(role: Role): boolean {
+  return role === "DEVELOPER";
 }
 
 /** Throw-style guards used by dashboard/admin routes. Return the user or null. */
@@ -98,9 +104,15 @@ export async function requireAgent(): Promise<SessionUser | null> {
 export async function requireAdmin(): Promise<SessionUser | null> {
   return requireRole(["ADMIN"]);
 }
+/** Developer portal guard. Admins are allowed through for oversight. */
+export async function requireDeveloper(): Promise<SessionUser | null> {
+  const user = await getSessionUser();
+  if (!user || (user.role !== "DEVELOPER" && user.role !== "ADMIN")) return null;
+  return user;
+}
 
 export async function authenticate(email: string, password: string): Promise<SessionUser | null> {
-  const user = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() }, include: { agent: true } });
+  const user = await prisma.user.findUnique({ where: { email: email.toLowerCase().trim() }, include: { agent: true, developer: true } });
   if (!user || !user.passwordHash) return null;
   const ok = await verifyPassword(password, user.passwordHash);
   if (!ok) return null;
@@ -112,5 +124,6 @@ export async function authenticate(email: string, password: string): Promise<Ses
     role: user.role as Role,
     avatarUrl: user.avatarUrl,
     agentId: user.agent?.id ?? null,
+    developerId: user.developer?.id ?? null,
   };
 }

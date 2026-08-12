@@ -43,7 +43,8 @@ export async function registerAction(_prev: AuthState, formData: FormData): Prom
   const existing = await prisma.user.findUnique({ where: { email: d.email.toLowerCase() } });
   if (existing) return { error: "An account with that email already exists." };
 
-  const isAgent = ["AGENT", "BROKER", "DEVELOPER"].includes(d.role);
+  const isAgent = ["AGENT", "BROKER"].includes(d.role);
+  const isDeveloper = d.role === "DEVELOPER";
   const user = await prisma.user.create({
     data: {
       name: d.name,
@@ -54,10 +55,13 @@ export async function registerAction(_prev: AuthState, formData: FormData): Prom
       agent: isAgent
         ? { create: { company: d.company, licenseNumber: d.licenseNumber, verified: false, contactEmail: d.email.toLowerCase() } }
         : undefined,
+      developer: isDeveloper
+        ? { create: { company: d.company || d.name, contactEmail: d.email.toLowerCase(), verified: false } }
+        : undefined,
     },
   });
   await createSession(user.id);
-  redirect(isAgent ? "/dashboard" : "/browse");
+  redirect(isDeveloper ? "/developer" : isAgent ? "/dashboard" : "/browse");
 }
 
 export async function logoutAction() {
@@ -67,6 +71,7 @@ export async function logoutAction() {
 
 function safeNext(next: string, role: string): string {
   if (role === "ADMIN") return next.startsWith("/") ? next : "/admin";
-  if (["AGENT", "BROKER", "DEVELOPER"].includes(role) && (next === "/browse" || next === "/")) return "/dashboard";
+  if (role === "DEVELOPER" && (next === "/browse" || next === "/")) return "/developer";
+  if (["AGENT", "BROKER"].includes(role) && (next === "/browse" || next === "/")) return "/dashboard";
   return next.startsWith("/") && !next.startsWith("//") ? next : "/browse";
 }

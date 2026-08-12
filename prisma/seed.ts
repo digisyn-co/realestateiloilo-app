@@ -151,9 +151,125 @@ async function main() {
   await prisma.notification.create({ data: { userId: buyer.id, type: "STATUS_CHANGED", title: "Price drop on a saved home", body: "Modern 3-Bedroom Family Home dropped 6%.", href: "/saved" } });
 
   await seedImports(admin.id, agents[0].agent!.id, created);
+  const devUnits = await seedDevelopers(pw, admin.id, agents, buyer.id);
 
-  console.log(`Seeded ${created.length} listings, ${agents.length} brokers, admin + buyers.`);
-  console.log(`Login: admin@realestateiloilo.app / carla@ilonggorealty.ph / buyer@realestateiloilo.app — password: ${DEV_PASSWORD}`);
+  console.log(`Seeded ${created.length} listings, ${agents.length} brokers, ${devUnits} developer units across 3 projects, admin + buyers.`);
+  console.log(`Login: admin@realestateiloilo.app / dev@iloiloprime.ph / carla@ilonggorealty.ph / buyer@realestateiloilo.app — password: ${DEV_PASSWORD}`);
+}
+
+// ---- Developer ecosystem seed (brief §34) ---------------------------------
+async function seedDevelopers(
+  pw: string,
+  adminId: string,
+  agents: Array<Awaited<ReturnType<typeof prisma.user.create>> & { agent: { id: string } | null }>,
+  buyerId: string,
+): Promise<number> {
+  const devUser = await prisma.user.create({
+    data: {
+      name: "Iloilo Prime Developments", email: "dev@iloiloprime.ph", phone: "+63 33 320 8800", role: "DEVELOPER", passwordHash: pw,
+      verificationStatus: "VERIFIED",
+      developer: {
+        create: {
+          company: "Iloilo Prime Developments", verified: true, verificationStatus: "VERIFIED", yearsOperating: 14,
+          registrationNo: "SEC-CS201400123", repName: "Antonio Lopez", contactEmail: "sales@iloiloprime.ph", contactPhone: "+63 33 320 8800",
+          website: "https://iloiloprime.example.ph",
+          description: "A leading Western Visayas developer building vertical and horizontal communities across Iloilo City and its growth corridors since 2012. Every project is title-clean and turned over on schedule.",
+        },
+      },
+    },
+    include: { developer: true },
+  });
+  const developerId = devUser.developer!.id;
+
+  const AMEN = ["Swimming Pool", "Gym", "Security", "Backup Power", "Near Mall", "Garden"];
+  const amenityIds = new Map((await prisma.amenity.findMany({ where: { name: { in: AMEN } } })).map((a) => [a.name, a.id]));
+
+  const projectDefs = [
+    { name: "The Grand Iloilo Residences", city: "Mandurriao", barangay: "San Rafael", type: "CONDO", img: "b2.png", buildings: [{ name: "Tower A", floors: 20 }, { name: "Tower B", floors: 20 }], perBuilding: 45, base: 4_200_000, status: "SELLING" },
+    { name: "Pavia Heights", city: "Pavia", barangay: "Ungka", type: "SUBDIVISION", img: "b5.png", buildings: [{ name: "Phase 1", floors: 2 }], perBuilding: 60, base: 2_800_000, status: "SELLING" },
+    { name: "Iloilo Riverfront Towers", city: "Mandurriao", barangay: "Bolilao", type: "MIXED_USE", img: "b6.png", buildings: [{ name: "North Tower", floors: 22 }, { name: "South Tower", floors: 22 }], perBuilding: 45, base: 5_100_000, status: "CONSTRUCTION" },
+  ];
+  const UNIT_TYPES_BY = ["STUDIO", "1BR", "2BR", "3BR"];
+  const AREA_BY: Record<string, number> = { STUDIO: 28, "1BR": 42, "2BR": 65, "3BR": 92 };
+
+  let totalUnits = 0;
+  const projects: { id: string; slug: string }[] = [];
+
+  for (let pi = 0; pi < projectDefs.length; pi++) {
+    const d = projectDefs[pi];
+    const area = areaByName(d.city);
+    const project = await prisma.project.create({
+      data: {
+        developerId, name: d.name, slug: d.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        projectType: d.type, city: d.city, barangay: d.barangay, address: `${d.barangay}, ${d.city}`,
+        latitude: area?.lat, longitude: area?.lng, status: d.status, visibility: "PUBLIC",
+        distribution: pi === 2 ? "SELECTED_AGENTS" : "ALL_AGENTS", leadOwnership: "SHARED", defaultCommission: 3,
+        paymentTerms: "20% down payable in 24 months, balance via bank financing.",
+        financingOptions: "In-house, Pag-IBIG, and accredited bank financing.",
+        turnoverDate: new Date(2027, 5 + pi, 1),
+        description: `${d.name} is a ${d.type.toLowerCase().replace("_", "-")} development in ${d.city} by Iloilo Prime Developments, offering modern units with resort-style amenities and easy access to the business district.`,
+        images: { create: [{ url: `/property-images/${d.img}`, sortOrder: 0 }] },
+        amenities: { create: AMEN.filter((a) => amenityIds.get(a)).map((a) => ({ amenity: { connect: { id: amenityIds.get(a)! } } })) },
+        documents: {
+          create: [
+            { title: "Project brochure", type: "BROCHURE", url: "/property-images/broker.png", visibility: "PUBLIC" },
+            { title: "Agent price list", type: "PRICE_LIST", url: "/property-images/broker.png", visibility: "AGENT_ONLY" },
+            { title: "Sales kit", type: "SALES_KIT", url: "/property-images/broker.png", visibility: "AGENT_ONLY" },
+          ],
+        },
+      },
+    });
+    projects.push({ id: project.id, slug: project.slug });
+
+    for (const b of d.buildings) {
+      const building = await prisma.building.create({ data: { projectId: project.id, name: b.name, floors: b.floors } });
+      const unitData = [];
+      for (let u = 0; u < d.perBuilding; u++) {
+        const floor = Math.floor(u / 6) + 1;
+        const type = UNIT_TYPES_BY[u % UNIT_TYPES_BY.length];
+        const price = d.base + (u % UNIT_TYPES_BY.length) * 1_600_000 + floor * 90_000;
+        // deterministic status spread: ~65% available, 15% reserved, 20% sold
+        const mod = (u * 7 + pi * 3) % 20;
+        const status = mod < 3 ? "SOLD" : mod < 6 ? "RESERVED" : mod === 6 ? "ON_HOLD" : "AVAILABLE";
+        unitData.push({
+          projectId: project.id, buildingId: building.id,
+          unitNumber: `${b.name.split(" ").map((w) => w[0]).join("")}-${floor}${String((u % 6) + 1).padStart(2, "0")}`,
+          floor, unitType: type, bedrooms: type === "STUDIO" ? 0 : Number(type[0]), bathrooms: type === "3BR" ? 2 : 1,
+          floorArea: AREA_BY[type], parking: type === "STUDIO" ? 0 : 1, price, agentPrice: Math.round(price * 0.97),
+          status, orientation: ["North", "East", "South", "West"][u % 4],
+        });
+      }
+      await prisma.unit.createMany({ data: unitData });
+      totalUnits += unitData.length;
+    }
+  }
+
+  // Agent distribution: authorise Carla (agents[0]) + Jerome (agents[1]); Nadia requests access.
+  const grand = projects[0];
+  const river = projects[2];
+  await prisma.agentProjectAccess.create({ data: { projectId: grand.id, agentId: agents[0].agent!.id, status: "APPROVED", commissionPct: 3 } });
+  await prisma.agentProjectAccess.create({ data: { projectId: grand.id, agentId: agents[1].agent!.id, status: "APPROVED", commissionPct: 3.5 } });
+  await prisma.agentProjectAccess.create({ data: { projectId: river.id, agentId: agents[2].agent!.id, status: "REQUESTED", commissionPct: 3 } });
+  await prisma.notification.create({ data: { userId: devUser.id, type: "AGENT_ACCESS_REQUEST", title: "Agent access request", body: `${agents[2].name} requested access to Iloilo Riverfront Towers.`, href: "/developer/agents" } });
+
+  // Leads + a reservation (held) to populate the pipeline.
+  await prisma.projectLead.create({ data: { projectId: grand.id, agentId: agents[0].agent!.id, name: "Rowena Diaz", contact: "+63 917 700 1122", budget: "₱6M–₱8M", unitTypeInterest: "1BR", source: "AGENT", ownership: "SHARED", status: "NEW" } });
+  await prisma.projectLead.create({ data: { projectId: grand.id, buyerUserId: buyerId, name: "Marco Tan", contact: "+63 917 111 2233", unitTypeInterest: "2BR", source: "PUBLIC", ownership: "DEVELOPER", status: "CONTACTED" } });
+
+  const firstAvail = await prisma.unit.findFirst({ where: { projectId: grand.id, status: "AVAILABLE" }, orderBy: { unitNumber: "asc" } });
+  if (firstAvail) {
+    await prisma.unit.update({ where: { id: firstAvail.id }, data: { status: "ON_HOLD", holdAgentId: agents[0].agent!.id, holdExpiresAt: new Date(Date.now() + 36 * 3600_000) } });
+    await prisma.unitReservation.create({ data: { unitId: firstAvail.id, projectId: grand.id, agentId: agents[0].agent!.id, buyerName: "Rowena Diaz", buyerContact: "+63 917 700 1122", status: "HELD", holdExpiresAt: new Date(Date.now() + 36 * 3600_000) } });
+    await prisma.notification.create({ data: { userId: devUser.id, type: "RESERVATION_REQUEST", title: "Reservation request · The Grand Iloilo Residences", body: `Unit ${firstAvail.unitNumber} held for Rowena Diaz.`, href: "/developer/reservations" } });
+  }
+
+  // some project views for analytics
+  for (const p of projects) {
+    await prisma.projectView.createMany({ data: Array.from({ length: 40 }, (_, i) => ({ projectId: p.id, source: i % 3 === 0 ? "app" : "web", createdAt: new Date(Date.now() - i * 3600_000) })) });
+  }
+
+  await prisma.auditLog.create({ data: { actorId: adminId, action: "DEVELOPER_SEEDED", entity: "Developer", entityId: developerId, meta: JSON.stringify({ projects: projects.length, units: totalUnits }) } });
+  return totalUnits;
 }
 
 async function seedImports(adminId: string, agentId: string, created: { id: string; seed: Seed }[]) {
@@ -195,6 +311,11 @@ async function seedImports(adminId: string, agentId: string, created: { id: stri
 async function reset() {
   // Order matters for FK constraints.
   const tables = [
+    // developer ecosystem (children first)
+    "unitSale", "unitReservation", "projectLead", "projectView", "agentProjectAccess",
+    "projectDocument", "projectImage", "projectAmenity", "unit", "building", "project",
+    "developerDocument", "developer",
+    // core
     "duplicateMatch", "importRecord", "importJob", "importSource", "auditLog", "notification",
     "propertyView", "viewingRequest", "message", "thread", "lead", "inquiry", "report",
     "savedProperty", "listingImage", "listing", "propertyAmenity", "amenity", "property",

@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Heart, GitCompare, Bell, MessageCircle, LayoutDashboard, Shield, Settings, LogOut, ChevronRight, type LucideIcon } from "lucide-react";
+import { Heart, GitCompare, Bell, MessageCircle, LayoutDashboard, Building2, Shield, Settings, LogOut, ChevronRight, type LucideIcon } from "lucide-react";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { logoutAction } from "@/lib/auth-actions";
 import { initials } from "@/lib/format";
-import { isAgentRole } from "@/lib/auth";
+import { isAgentRole, isDeveloperRole } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +27,8 @@ export default async function AccountPage() {
   ];
   const rows2 = [
     ...(isAgentRole(user.role) ? [{ icon: LayoutDashboard, label: "Broker dashboard", href: "/dashboard" }] : []),
-    ...(user.role === "ADMIN" ? [{ icon: Shield, label: "Admin dashboard", href: "/admin" }] : []),
+    ...(isDeveloperRole(user.role) ? [{ icon: Building2, label: "Developer portal", href: "/developer" }] : []),
+    ...(user.role === "ADMIN" ? [{ icon: Shield, label: "Admin dashboard", href: "/admin" }, { icon: Building2, label: "Developer portal", href: "/developer" }] : []),
     { icon: Settings, label: "Settings", href: "/account#settings" },
   ];
 
