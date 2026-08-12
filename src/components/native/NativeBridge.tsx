@@ -11,18 +11,32 @@ import { usePathname, useRouter } from "next/navigation";
  *
  * All Capacitor imports are dynamic so they never run during SSR / on the server.
  */
+/**
+ * True when running inside the Pro native shell (broker/agent/developer app).
+ * capacitor.config.ts appends "IloiloRealEstatePro" to the WebView User-Agent for
+ * the Pro flavor; the consumer app appends "IloiloRealEstate" (no "Pro").
+ */
+function isProApp() {
+  if (typeof navigator === "undefined") return false;
+  return /IloiloRealEstatePro/.test(navigator.userAgent);
+}
+
 export function NativeBridge() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Open the app directly into the buyer experience (brief: app = buyers/renters).
+  // Open the app directly into the right experience for the flavor:
+  //   • Pro app (broker/agent/developer) → /dashboard
+  //   • Consumer app (buyers/renters)    → /browse
+  // The two flavors are told apart by the appended User-Agent token set in
+  // capacitor.config.ts (CAP_FLAVOR=pro appends "IloiloRealEstatePro").
   useEffect(() => {
     let cancelled = false;
     (async () => {
       const { Capacitor } = await import("@capacitor/core");
       if (!Capacitor.isNativePlatform()) return;
       if (cancelled) return;
-      if (pathname === "/") router.replace("/browse");
+      if (pathname === "/") router.replace(isProApp() ? "/dashboard" : "/browse");
     })();
     return () => {
       cancelled = true;
@@ -42,9 +56,11 @@ export function NativeBridge() {
       } catch {}
       try {
         const { StatusBar, Style } = await import("@capacitor/status-bar");
-        await StatusBar.setStyle({ style: Style.Light }); // dark icons on light bg
+        const pro = isProApp();
+        // Pro app rides the dark forest-green dashboard; consumer app is light ivory.
+        await StatusBar.setStyle({ style: pro ? Style.Dark : Style.Light });
         if (Capacitor.getPlatform() === "android") {
-          await StatusBar.setBackgroundColor({ color: "#FBF8F3" });
+          await StatusBar.setBackgroundColor({ color: pro ? "#031A14" : "#FBF8F3" });
         }
       } catch {}
 

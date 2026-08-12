@@ -1,54 +1,96 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 /**
- * The Iloilo Real Estate — native mobile app (Capacitor 6).
+ * The Iloilo Real Estate — native mobile apps (Capacitor 6).
  *
- * Strategy: the app is a server-rendered Next.js app, so the native shell loads
- * the hosted app over HTTPS (`server.url`) and layers native capabilities on top
- * (push, camera, geolocation, status bar, splash, hardware back). This reuses the
- * entire web app while shipping as real iOS/Android apps to the stores.
+ * ONE web codebase, TWO store apps, selected at build time via `CAP_FLAVOR`:
  *
- * The app opens directly into the buyer/renter experience — src/components/native/
- * NativeBridge.tsx redirects "/" -> "/browse" when running natively.
+ *   • consumer (default) — "The Iloilo Real Estate"  → opens into /browse (buyers & renters)
+ *   • pro     (CAP_FLAVOR=pro) — "Iloilo Real Estate Pro" → opens into /dashboard
+ *                                (brokers, agents, developers)
  *
- * To point at a custom domain later, change `server.url` + `allowNavigation`.
- * For local development on a device/simulator, set:
- *   server.url = "http://<your-LAN-ip>:3000"  and  server.cleartext = true
+ * Both are thin native shells that load the hosted Next.js app over HTTPS
+ * (`server.url`) and layer native capabilities on top (push, camera, geolocation,
+ * status bar, splash, hardware back). The Pro flavor lives in its own native
+ * project folders (ios-pro/, android-pro/) so the two apps build independently.
+ *
+ * Build the Pro app:
+ *   CAP_FLAVOR=pro npx cap add ios      # first time — scaffolds ios-pro/
+ *   CAP_FLAVOR=pro npx cap add android  # first time — scaffolds android-pro/
+ *   CAP_FLAVOR=pro npx cap sync
+ * (npm run cap:pro:* wrap these.)
+ *
+ * The web app tells the two apart at runtime via the appended User-Agent token
+ * ("IloiloRealEstatePro"); see src/components/native/NativeBridge.tsx.
  */
 const PROD_URL = "https://realestateiloilo-app.vercel.app";
+const HOST = "realestateiloilo-app.vercel.app";
+
+const isPro = process.env.CAP_FLAVOR === "pro";
+
+// Per-flavor identity + theming. Consumer is light (ivory); Pro matches the dark
+// forest-green dashboard so the splash/status bar don't flash a light background.
+const flavor = isPro
+  ? {
+      appId: "ph.realestateiloilo.pro",
+      appName: "Iloilo Real Estate Pro",
+      bg: "#031A14", // dark dashboard background
+      splashBg: "#031A14",
+      splashBgDark: "#050706",
+      statusBarStyle: "DARK" as const, // dark bar background → light icons
+      statusBarBg: "#031A14",
+      ua: "IloiloRealEstatePro",
+      iosPath: "ios-pro",
+      androidPath: "android-pro",
+    }
+  : {
+      appId: "ph.realestateiloilo.app",
+      appName: "The Iloilo Real Estate",
+      bg: "#F4F0E6", // light ivory app background
+      splashBg: "#F4F0E6",
+      splashBgDark: "#050706",
+      statusBarStyle: "LIGHT" as const, // light bar background → dark icons
+      statusBarBg: "#F4F0E6",
+      ua: "IloiloRealEstate",
+      iosPath: "ios",
+      androidPath: "android",
+    };
 
 const config: CapacitorConfig = {
-  appId: "ph.realestateiloilo.app",
-  appName: "The Iloilo Real Estate",
+  appId: flavor.appId,
+  appName: flavor.appName,
   webDir: "mobile/www", // offline/loading fallback bundled into the app
+  appendUserAgent: flavor.ua, // lets the web app detect which flavor is running
   server: {
     url: PROD_URL,
-    allowNavigation: ["realestateiloilo-app.vercel.app"],
+    allowNavigation: [HOST],
     cleartext: false,
     androidScheme: "https",
     iosScheme: "https",
   },
-  backgroundColor: "#F4F0E6",
+  backgroundColor: flavor.bg,
   ios: {
+    path: flavor.iosPath,
     contentInset: "always",
-    backgroundColor: "#F4F0E6",
+    backgroundColor: flavor.bg,
     limitsNavigationsToAppBoundDomains: false,
   },
   android: {
-    backgroundColor: "#F4F0E6",
+    path: flavor.androidPath,
+    backgroundColor: flavor.bg,
   },
   plugins: {
     SplashScreen: {
       launchShowDuration: 1200,
       launchAutoHide: false, // NativeBridge hides it once the web app is ready
-      backgroundColor: "#F4F0E6",
+      backgroundColor: flavor.splashBg,
       androidScaleType: "CENTER_CROP",
       showSpinner: false,
       splashImmersive: false,
     },
     StatusBar: {
-      style: "LIGHT", // dark text/icons on the light app background
-      backgroundColor: "#F4F0E6",
+      style: flavor.statusBarStyle,
+      backgroundColor: flavor.statusBarBg,
     },
     Keyboard: {
       resize: "native",

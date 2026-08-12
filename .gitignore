@@ -53,5 +53,16 @@ yarn-error.log*
 /android/captures
 /android/local.properties
 /android/app/src/main/assets/public
+# Pro flavor (Iloilo Real Estate Pro) — same rules, separate native projects
+/ios-pro/App/Pods
+/ios-pro/App/App/public
+/ios-pro/App/build
+/ios-pro/DerivedData
+/android-pro/.gradle
+/android-pro/build
+/android-pro/app/build
+/android-pro/captures
+/android-pro/local.properties
+/android-pro/app/src/main/assets/public
 .DS_Store
 /icons
